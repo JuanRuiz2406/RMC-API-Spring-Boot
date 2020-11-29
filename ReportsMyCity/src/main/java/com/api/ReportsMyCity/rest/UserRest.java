@@ -79,7 +79,7 @@ public class UserRest {
     }
 
     @PutMapping
-    public void updateUser(@RequestBody User user) throws Exception{
+    public void updateUser(@RequestBody User user) throws ApiOkException, ResourceNotFoundException, Exception{
 
         Optional<User> optionalUser = userRepo.findById(user.getId());
         if (optionalUser.isPresent()) {
