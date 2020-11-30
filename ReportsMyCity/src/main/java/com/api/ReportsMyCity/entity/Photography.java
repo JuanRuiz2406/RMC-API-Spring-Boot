@@ -20,7 +20,7 @@ public class Photography {
     private User user;
 
     @ManyToOne
-    private Report repots;
+    private Report reports;
 
     public int getId() {
         return id;
@@ -46,19 +46,17 @@ public class Photography {
         this.category = category;
     }
 
-    public User getUser() {
-        return user;
-    }
+    public User getUser() { return user; }
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public Report getRepots() {
-        return repots;
+    public Report getReports() {
+        return reports;
     }
 
-    public void setRepots(Report repots) {
-        this.repots = repots;
+    public void setReports(Report reports) {
+        this.reports = reports;
     }
 }

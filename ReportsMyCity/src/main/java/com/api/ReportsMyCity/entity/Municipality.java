@@ -31,7 +31,7 @@ public class Municipality {
 
     @NotBlank(message = "El horario es obligatorio")
     @Column(length = 45)
-    private String schudule;
+    private String schedule;
 
     @Column(length = 100)
     private String webSite;
@@ -79,12 +79,12 @@ public class Municipality {
         this.telephone = telephone;
     }
 
-    public String getSchudule() {
-        return schudule;
+    public String getSchedule() {
+        return schedule;
     }
 
-    public void setSchudule(String schudule) {
-        this.schudule = schudule;
+    public void setSchedule(String schedule) {
+        this.schedule = schedule;
     }
 
     public String getWebSite() {
