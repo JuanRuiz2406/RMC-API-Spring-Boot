@@ -4,4 +4,8 @@ import com.api.ReportsMyCity.entity.Municipality;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MunicipalityRepository extends JpaRepository<Municipality, Integer> {
+
+    Municipality findByEmail(String email);
+    Municipality findByName(String name);
+    Municipality findByDirection(String direction);
 }
