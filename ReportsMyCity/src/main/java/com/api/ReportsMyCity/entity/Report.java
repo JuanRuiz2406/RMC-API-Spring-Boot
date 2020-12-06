@@ -36,9 +36,6 @@ public class Report {
     @ManyToOne
     private Municipality municipality;
 
-    @OneToMany
-    private List<Photography> imageList;
-
     public int getId() {
         return id;
     }
@@ -101,13 +98,5 @@ public class Report {
 
     public void setMunicipality(Municipality municipality) {
         this.municipality = municipality;
-    }
-
-    public List<Photography> getImageList() {
-        return imageList;
-    }
-
-    public void setImageList(List<Photography> imageList) {
-        this.imageList = imageList;
     }
 }
