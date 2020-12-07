@@ -54,15 +54,12 @@ public class MunicipalityRest {
 
         Municipality muniTemp = municipalityRepo.findByEmail(muni.getEmail());
         Municipality muniTempName = municipalityRepo.findByName(muni.getName());
-        Municipality muniTempDirection = municipalityRepo.findByDirection(muni.getAdress());
 
         //rules
         if(muniTemp !=  null) {
             throw new Exception("Ya existe una municipalidad con ese correo, corrija los datos");
         }else if(muniTempName != null){
             throw new Exception("Ya existe una municipalidad con ese nombre, corrija los datos");
-        }else if(muniTempDirection != null) {
-            throw new Exception("Ya existe una municipalidad con esa Direccion, corrija los datos");
         }else {
             municipalityRepo.save(muni);
             throw new ApiOkException("Se guardo la municipalidad exitosamente");

@@ -7,5 +7,4 @@ public interface MunicipalityRepository extends JpaRepository<Municipality, Inte
 
     Municipality findByEmail(String email);
     Municipality findByName(String name);
-    Municipality findByDirection(String direction);
 }
