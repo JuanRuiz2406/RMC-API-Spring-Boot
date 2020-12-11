@@ -28,7 +28,7 @@ public class MunicipalityRest {
     public ResponseEntity<List<Municipality>> getMunnicipalitys() throws ResourceNotFoundException {
         List<Municipality> municipalitys = municipalityRepo.findAll();
         if(municipalitys.isEmpty()) {
-            throw new ResourceNotFoundException("No hay municipalidades registradas");
+            throw new ResourceNotFoundException("No hay municipalidades registradas.");
         }else {
             return ResponseEntity.ok(municipalitys);
         }
@@ -36,7 +36,7 @@ public class MunicipalityRest {
 
     @RequestMapping(value = "{muniId}") //municipalitys/{muniId}
     public Municipality getMuniById(@PathVariable("muniId") int muniId){
-        return this.municipalityRepo.findById(muniId).orElseThrow(()->new ResourceNotFoundException("Municipalidad no existe o no fue encontrada"));
+        return this.municipalityRepo.findById(muniId).orElseThrow(()->new ResourceNotFoundException("Error, la municipalidad no existe."));
     }
 
     @PostMapping
@@ -51,18 +51,17 @@ public class MunicipalityRest {
             throw new ApiUnproccessableEntityException(violation2.getMessage());
         }
 
-
         Municipality muniTemp = municipalityRepo.findByEmail(muni.getEmail());
         Municipality muniTempName = municipalityRepo.findByName(muni.getName());
 
         //rules
         if(muniTemp !=  null) {
-            throw new Exception("Ya existe una municipalidad con ese correo, corrija los datos");
+            throw new Exception("Error, otra municipalidad posee este correo electrónico.");
         }else if(muniTempName != null){
-            throw new Exception("Ya existe una municipalidad con ese nombre, corrija los datos");
+            throw new Exception("Error, otra municipalidad posee este nombre.");
         }else {
             municipalityRepo.save(muni);
-            throw new ApiOkException("Se guardo la municipalidad exitosamente");
+            throw new ApiOkException("Se guardo la municipalidad exitosamente.");
         }
 
     }
@@ -74,9 +73,9 @@ public class MunicipalityRest {
 
         if(optionalMunicipality.isPresent()) {
             municipalityRepo.deleteById(muniId);
-            throw new ApiOkException("Se elimino exitosamente");
+            throw new ApiOkException("Municipalidad eliminada exitosamente.");
         }else {
-            throw new ResourceNotFoundException("No existe la municipalidad, no se puede eliminar");
+            throw new ResourceNotFoundException("Error, esta municipalidad no existe.");
         }
     }
 
@@ -97,19 +96,19 @@ public class MunicipalityRest {
             if(!updateMunicipality.getName().isEmpty()) {
                 if(!updateMunicipality.getEmail().isEmpty()) {
                     if(municipalityRepo.save(updateMunicipality) != null) {
-                        throw new ApiOkException("Municipalidad actualizada exitosamente");
+                        throw new ApiOkException("Municipalidad actualizada exitosamente.");
                     }else {
-                        throw new Exception("Error al guardar la actualizacion, error interno");
+                        throw new Exception("Error al actualizar la municipalidad.");
                     }
                 }else {
-                    throw new ResourceNotFoundException("Introduzca un correo electronico");
+                    throw new ResourceNotFoundException("Introduzca un correo electrónico.");
                 }
             }else {
-                throw new ResourceNotFoundException("Introduzca un nombre valido");
+                throw new ResourceNotFoundException("Introduzca un nombre válido.");
             }
 
         }else {
-            throw new ResourceNotFoundException("No existe la municipalidad o los datos estan incorrectos");
+            throw new ResourceNotFoundException("Error, esta municipalidad no existe.");
         }
     }
 }

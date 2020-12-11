@@ -16,6 +16,8 @@ public class DepartamentRest {
     @Autowired
     private DepartamentRepository departmentRepo;
 
+    // Msjs
+
     @GetMapping// departments/
     public ResponseEntity<List<DepartamentMunicipality>> getDepartments(){
 

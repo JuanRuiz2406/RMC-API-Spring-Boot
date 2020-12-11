@@ -28,18 +28,20 @@ public class UserRest {
     public ResponseEntity<List<User>> getUsers() throws ResourceNotFoundException{
         List<User> users = userRepo.findAll();
         if(users.isEmpty()){
-            throw new ResourceNotFoundException("No hay usuarios registrados");
+            throw new ResourceNotFoundException("No hay usuarios registrados.");
         }
         return ResponseEntity.ok(users);
     }
 
     @RequestMapping(value = "{userId}") //user/{userId}
     public User getUserById(@PathVariable("userId") int userId){
-        return this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("No existe un usuario registrado con ese id"));
+        return this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("Error, este usuario no existe."));
     }
 
     @PostMapping // user
     public void createUser(@RequestBody User user) throws ApiOkException, Exception, ApiUnproccessableEntityException{
+
+        user.setRole("user");
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -53,15 +55,15 @@ public class UserRest {
 
         if (optionalUser != null) {
             String mailString = optionalUser.getEmail();
-            if (!mailString.equals(user.getEmail())) {
+            if (!mailString.equals(user.getEmail())) { // Creo que está validación esta de más.
                 userRepo.save(user);
-                throw new ApiOkException("El usuario se guardo exitosamente");
+                throw new ApiOkException("Usuario guardado exitosamente.");
             }else {
-                throw new Exception("Ya existe un usuario con ese correo");
+                throw new Exception("Error, otro usuario posee este correo electrónico.");
             }
         }else {
             userRepo.save(user);
-            throw new ApiOkException("El usuario se guardo exitosamente");
+            throw new ApiOkException("Usuario guardado exitosamente.");
         }
     }
 
@@ -71,10 +73,10 @@ public class UserRest {
         Optional<User> user = userRepo.findById(userId);
 
         if(!user.isPresent()) {
-            throw new ResourceNotFoundException("Digite un usuario correcto");
+            throw new ResourceNotFoundException("Error, el usuario no ha sido encontrado.");
         }else {
             userRepo.deleteById(userId);
-            throw new ApiOkException("Se elimino exitosamente");
+            throw new ApiOkException("Usuario eliminado exitosamente.");
         }
     }
 
@@ -92,15 +94,14 @@ public class UserRest {
             updateUser.setDirection(user.getDirection());
 
             if(userRepo.save(updateUser)!= null){
-                throw new ApiOkException("El usuario se actualizo exitosamente");
+                throw new ApiOkException("Usuario actualizado exitosamente.");
             }else {
-                throw new Exception("Error al actualizar el usuario");
+                throw new Exception("Error al actualizar el usuario.");
             }
         }else {
-            throw new ResourceNotFoundException("El usario no existe");
+            throw new ResourceNotFoundException("Error, este usuario no existe.");
         }
 
     }
-
 
 }

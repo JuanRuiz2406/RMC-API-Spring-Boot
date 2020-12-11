@@ -29,7 +29,7 @@ public class CoordenatesRest {
 
         List<Coordenates> coordenates = coordenatesRepo.findAll();
         if(coordenates.isEmpty()) {
-            throw new ResourceNotFoundException("No hay coordenadas guardadas");
+            throw new ResourceNotFoundException("No hay ubicaciones registradas.");
         }
         return ResponseEntity.ok(coordenates);
 
@@ -38,7 +38,7 @@ public class CoordenatesRest {
     @RequestMapping(value = "{coordenadesId}") // directions/{directionId}
     public Coordenates getCoordenatesById(@PathVariable("coordenadesId") int coordenadesId) {
 
-        return this.coordenatesRepo.findById(coordenadesId).orElseThrow(()->new ResourceNotFoundException("No existe una coordenada con ese id"));
+        return this.coordenatesRepo.findById(coordenadesId).orElseThrow(()->new ResourceNotFoundException("Error, esta ubicación no existe."));
 
     }
 
@@ -54,13 +54,14 @@ public class CoordenatesRest {
         }
 
         if(coordenatesRepo.save(coordenates) != null) {
-            throw new ApiOkException("Coordenada guardada exitosamente");
+            throw new ApiOkException("Ubicación guardada exitosamente.");
         }else {
-            throw new ResourceNotFoundException("Problemas al guardar la coordenada");
+            throw new ResourceNotFoundException("Error al guardar la ubicación.");
         }
 
     }
 
+    // Ocupamos borrar coordenadas?
     @DeleteMapping(value = "{coordenatesId}") // directions/directionId {DELETE}
     public void deleteCoordenates(@PathVariable("coordenatesId") int coordenatesId) throws ResourceNotFoundException, ApiOkException{
 
@@ -68,13 +69,14 @@ public class CoordenatesRest {
 
         if(dire.isPresent()) {
             coordenatesRepo.deleteById(coordenatesId);
-            throw new ApiOkException("Se elimino exitosamente");
+            throw new ApiOkException("Ubicación eliminada exitosamente.");
         }else {
-            throw new ResourceNotFoundException("No existe una coordenada con ese id");
+            throw new ResourceNotFoundException("Error, esta ubicación no existe.");
         }
 
     }
 
+    // Necesaria?
     @PutMapping
     public void updateDirection(@RequestBody Coordenates direction) throws ResourceNotFoundException, ApiOkException, Exception{
 
@@ -85,18 +87,19 @@ public class CoordenatesRest {
             updateDirection.setLongitude(direction.getLongitude());
 
             if(updateDirection.getLatitude().isEmpty()){
-                throw new ResourceNotFoundException("Error introduzca una latitud");
+                throw new ResourceNotFoundException("Error introduzca una latitud.");
             }else if(updateDirection.getLongitude().isEmpty()) {
-                throw new ResourceNotFoundException("Error introduzca una longitud");
+                throw new ResourceNotFoundException("Error introduzca una longitud.");
             }else if(coordenatesRepo.save(updateDirection)!=null) {
-                throw new ApiOkException("Se actualizo correctamente");
+                throw new ApiOkException("Ubicación actualizada correctamente.");
             }else {
-                throw new Exception("Error al actualizar, error en el servidor");
+                throw new Exception("Error al actualizar la ubicación.");
             }
 
         }else {
-            throw new ResourceNotFoundException("No existe la coordenada");
+            throw new ResourceNotFoundException("Error, esta ubicación no existe.");
         }
 
     }
+
 }

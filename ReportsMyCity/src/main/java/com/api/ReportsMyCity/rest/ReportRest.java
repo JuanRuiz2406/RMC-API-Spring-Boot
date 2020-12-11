@@ -29,7 +29,7 @@ public class ReportRest {
 
         List<Report> reports = reportRepo.findAll();
         if(reports.isEmpty()) {
-            throw new ResourceNotFoundException("No hay reportes");
+            throw new ResourceNotFoundException("No hay reportes registrados.");
         }
         return ResponseEntity.ok(reports);
     }
@@ -37,7 +37,7 @@ public class ReportRest {
     @RequestMapping(value = "{reportId}") // reports/{reportID}
     public Report getReportById(@PathVariable("reportId") int reportId){
 
-        return this.reportRepo.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Reporte no existe o no fue encontrado"));
+        return this.reportRepo.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
 
     }
 
@@ -53,9 +53,9 @@ public class ReportRest {
         }
 
         if(reportRepo.save(report) != null) {
-            throw new ApiOkException("Se guardo el reporte");
+            throw new ApiOkException("Reporte guardado exitosamente.");
         }else {
-            throw new Exception("Error al guardar reporte, problemos internos");
+            throw new Exception("Error al guardar el reporte.");
         }
 
 
@@ -70,7 +70,7 @@ public class ReportRest {
             throw new ResourceNotFoundException("Digite un reporte correcto");
         }else {
             reportRepo.deleteById(reportId);
-            throw new ApiOkException("Se elimino exitosamente");
+            throw new ApiOkException("Reporte eliminado exitosamente.");
         }
 
     }
@@ -87,12 +87,13 @@ public class ReportRest {
             updateReport.setState(report.getState());
 
             if(reportRepo.save(updateReport) != null) {
-                throw new ApiOkException("El reporte se actualizo exitosamente");
+                throw new ApiOkException("Reporte actualizado exitosamente.");
             }else {
-                throw new Exception("Error al actualizar el reporte");
+                throw new Exception("Error al actualizar el reporte.");
             }
         }else {
-            throw new ResourceNotFoundException("El reporte no existe");
+            throw new ResourceNotFoundException("Error, el reporte no existe.");
         }
     }
+
 }

@@ -36,17 +36,18 @@ public class DetailReportRest {
 
     }
 
-    @PostMapping
+    @PostMapping // No tiene msjs
     public ResponseEntity<DetailReport> createDetailReport(@RequestBody DetailReport detailReport){
 
         DetailReport newDetailReport = detailRepo.save(detailReport);
         return ResponseEntity.ok(newDetailReport);
     }
 
-    @DeleteMapping(value = "{detailReportId}")
+    @DeleteMapping(value = "{detailReportId}") // No tiene msjs
     public ResponseEntity<DetailReport> deleteDetailReport(@PathVariable("detailReportId") int detailReportId) {
 
         detailRepo.deleteById(detailReportId);
         return ResponseEntity.ok(null);
     }
+
 }

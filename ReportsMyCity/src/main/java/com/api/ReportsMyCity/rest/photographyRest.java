@@ -30,7 +30,7 @@ public class photographyRest {
     public ResponseEntity<List<Photography>> getPhotographys() {
         List<Photography> photos = photoRepo.findAll();
         if(photos.isEmpty()) {
-            throw new ResourceNotFoundException("No hay imagenes");
+            throw new ResourceNotFoundException("No hay imágenes.");
         }
         return ResponseEntity.ok(photos);
     }
@@ -45,9 +45,9 @@ public class photographyRest {
         }
 
         if(photoRepo.save(photo) != null) {
-            throw new ApiOkException("Se guardo la Foto");
+            throw new ApiOkException("Imagen guardada exitosamente.");
         }else {
-            throw new Exception("Error al guardar la foto, problemos internos");
+            throw new Exception("Error al guardar la imagen.");
         }
     }
 }
