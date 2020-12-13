@@ -1,6 +1,7 @@
 package com.api.ReportsMyCity.rest;
 
 import com.api.ReportsMyCity.entity.Report;
+import com.api.ReportsMyCity.entity.User;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
@@ -34,10 +35,17 @@ public class ReportRest {
         return ResponseEntity.ok(reports);
     }
 
-    @RequestMapping(value = "{reportId}") // reports/{reportID}
+    @RequestMapping(value = "{reportId}") // reports/{reportId}
     public Report getReportById(@PathVariable("reportId") int reportId){
 
         return this.reportRepo.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
+
+    }
+
+    @RequestMapping(value = "/by/{user}") // reports/{reportId}
+    public Report getReportByUser(@PathVariable("user") User user){
+
+        return this.reportRepo.findByUser(user).orElseThrow(()->new ResourceNotFoundException("Este usuario no posee reportes."));
 
     }
 

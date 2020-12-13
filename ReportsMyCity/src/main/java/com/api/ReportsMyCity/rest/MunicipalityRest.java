@@ -25,7 +25,7 @@ public class MunicipalityRest {
     private MunicipalityRepository municipalityRepo;
 
     @GetMapping //municipality
-    public ResponseEntity<List<Municipality>> getMunnicipalitys() throws ResourceNotFoundException {
+    public ResponseEntity<List<Municipality>> getMunicipalitys() throws ResourceNotFoundException {
         List<Municipality> municipalitys = municipalityRepo.findAll();
         if(municipalitys.isEmpty()) {
             throw new ResourceNotFoundException("No hay municipalidades registradas.");
@@ -61,7 +61,7 @@ public class MunicipalityRest {
             throw new Exception("Error, otra municipalidad posee este nombre.");
         }else {
             municipalityRepo.save(muni);
-            throw new ApiOkException("Se guardo la municipalidad exitosamente.");
+            throw new ApiOkException("Municipalidad guardada exitosamente.");
         }
 
     }
