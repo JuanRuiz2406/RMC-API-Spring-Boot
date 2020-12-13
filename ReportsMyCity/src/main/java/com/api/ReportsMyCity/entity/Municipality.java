@@ -16,20 +16,19 @@ public class Municipality {
     @Column(length = 100, nullable = false, unique = true)
     private String name;
 
-    @NotBlank(message = "La direccion de linea es obligatorio")
-    @Column(length = 200)
+    @NotBlank(message = "La direccion de linea es obligatoria")
+    @Column(length = 200, nullable = false)
     private String adress;
 
     @Email(message = "El correo tiene formato incorrecto")
     @NotBlank(message = "El Correo es obligatorio")
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String email;
 
     @NotBlank(message = "El telefono es obligatorio")
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String telephone;
 
-    @NotBlank(message = "El horario es obligatorio")
     @Column(length = 45)
     private String schedule;
 
@@ -37,6 +36,7 @@ public class Municipality {
     private String webSite;
 
     @OneToOne
+    @JoinColumn(nullable = false)
     private Coordenates coordenates;
 
     public int getId() {

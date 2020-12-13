@@ -15,6 +15,10 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotBlank(message = "La tarjeta de identificacion es obligatoria")
+    @Column(length = 20)
+    private String idCard;
+
     @NotBlank(message = "El nombre es obligatorio")
     @Column(length = 45, nullable = false)
     private String name;
@@ -32,10 +36,10 @@ public class User implements Serializable {
     @Column(length = 50, nullable = false)
     private String password;
 
-    @Column(length = 45, nullable = false)
+    @Column(length = 45)
     private String role;
 
-    @Column(length = 100, nullable = false)
+    @Column(length = 100)
     private String direction;
 
     public int getId() {
@@ -92,5 +96,13 @@ public class User implements Serializable {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }

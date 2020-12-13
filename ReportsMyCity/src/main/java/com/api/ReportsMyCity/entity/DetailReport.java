@@ -14,9 +14,11 @@ public class DetailReport {
     private String updateDetail;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Report report;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private DepartamentMunicipality departament;
 
     public int getId() {

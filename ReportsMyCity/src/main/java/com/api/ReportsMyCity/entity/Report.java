@@ -13,7 +13,7 @@ public class Report {
     private int id;
 
     @NotBlank(message = "El titulo es obligatorio")
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     private String title;
 
     @NotBlank(message = "La descripcion es obligatoria")
@@ -28,12 +28,15 @@ public class Report {
     private String privacy;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Coordenates coordenates;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Municipality municipality;
 
     public int getId() {

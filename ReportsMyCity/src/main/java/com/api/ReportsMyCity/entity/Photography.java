@@ -17,6 +17,7 @@ public class Photography {
     private String category;
 
     @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne
