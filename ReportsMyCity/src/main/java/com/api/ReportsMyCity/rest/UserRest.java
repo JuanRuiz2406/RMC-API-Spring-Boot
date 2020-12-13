@@ -33,7 +33,7 @@ public class UserRest {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(value = "{userId}") //user/{userId}
+    @RequestMapping(value = "{userId}", method = RequestMethod.GET) //user/{userId}
     public User getUserById(@PathVariable("userId") int userId){
         return this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("Error, este usuario no existe."));
     }

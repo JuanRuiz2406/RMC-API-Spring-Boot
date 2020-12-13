@@ -35,21 +35,21 @@ public class ReportRest {
         return ResponseEntity.ok(reports);
     }
 
-    @RequestMapping(value = "{reportId}") // reports/{reportId}
+    @RequestMapping(value = "{reportId}", method = RequestMethod.GET) // reports/{reportId}
     public Report getReportById(@PathVariable("reportId") int reportId){
 
         return this.reportRepo.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
 
     }
 
-    @RequestMapping(value = "/by/{user}") // by/{user}
+    @RequestMapping(value = "/by/{user}", method = RequestMethod.GET) // by/{user}
     public Report getReportByUser(@PathVariable("user") User user){
 
         return this.reportRepo.findByUser(user).orElseThrow(()->new ResourceNotFoundException("Este usuario no posee reportes."));
 
     }
 
-    @RequestMapping(value = "/contains/{title}") // contains/{title}
+    @RequestMapping(value = "/contains/{title}", method = RequestMethod.GET) // contains/{title}
     public Report getReportByTitle(@PathVariable("title") String title){
 
         return this.reportRepo.findByTitle(title).orElseThrow(()->new ResourceNotFoundException("No hay reportes con título similar."));

@@ -25,8 +25,8 @@ public class DepartamentRest {
         return ResponseEntity.ok(departaments);
     }
 
-    @RequestMapping(value = "{depaID}") // departments/{depaId}/
-    public ResponseEntity<DepartamentMunicipality> getDepaByI(@PathVariable("depaID") int depaID){
+    @RequestMapping(value = "{depaID}", method = RequestMethod.GET) // departments/{depaId}/
+    public ResponseEntity<DepartamentMunicipality> getDepaById(@PathVariable("depaID") int depaID){
 
         Optional<DepartamentMunicipality> optionalDepartament = departmentRepo.findById(depaID);
 

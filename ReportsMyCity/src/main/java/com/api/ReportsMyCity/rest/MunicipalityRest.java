@@ -34,7 +34,7 @@ public class MunicipalityRest {
         }
     }
 
-    @RequestMapping(value = "{muniId}") //municipalitys/{muniId}
+    @RequestMapping(value = "{muniId}", method = RequestMethod.GET) //municipalitys/{muniId}
     public Municipality getMuniById(@PathVariable("muniId") int muniId){
         return this.municipalityRepo.findById(muniId).orElseThrow(()->new ResourceNotFoundException("Error, la municipalidad no existe."));
     }

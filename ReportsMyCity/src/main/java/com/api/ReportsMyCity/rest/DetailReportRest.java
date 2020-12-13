@@ -23,7 +23,7 @@ public class DetailReportRest {
         return ResponseEntity.ok(detailReports);
     }
 
-    @RequestMapping(value = "{detailReportId}") // detailReports/{detailReportID}
+    @RequestMapping(value = "{detailReportId}", method = RequestMethod.GET) // detailReports/{detailReportID}
     public ResponseEntity<DetailReport> getDetailReportById(@PathVariable("detailReportId") int detailReportId){
 
         Optional<DetailReport> optionalDetailReport = detailRepo.findById(detailReportId);

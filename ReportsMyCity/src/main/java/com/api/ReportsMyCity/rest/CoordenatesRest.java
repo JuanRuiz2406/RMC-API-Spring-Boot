@@ -35,7 +35,7 @@ public class CoordenatesRest {
 
     }
 
-    @RequestMapping(value = "{coordenadesId}") // directions/{directionId}
+    @RequestMapping(value = "{coordenadesId}", method = RequestMethod.GET) // directions/{directionId}
     public Coordenates getCoordenatesById(@PathVariable("coordenadesId") int coordenadesId) {
 
         return this.coordenatesRepo.findById(coordenadesId).orElseThrow(()->new ResourceNotFoundException("Error, esta ubicación no existe."));
