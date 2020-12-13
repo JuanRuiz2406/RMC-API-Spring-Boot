@@ -42,10 +42,17 @@ public class ReportRest {
 
     }
 
-    @RequestMapping(value = "/by/{user}") // reports/{reportId}
+    @RequestMapping(value = "/by/{user}") // by/{user}
     public Report getReportByUser(@PathVariable("user") User user){
 
         return this.reportRepo.findByUser(user).orElseThrow(()->new ResourceNotFoundException("Este usuario no posee reportes."));
+
+    }
+
+    @RequestMapping(value = "/contains/{title}") // contains/{title}
+    public Report getReportByTitle(@PathVariable("title") String title){
+
+        return this.reportRepo.findByTitle(title).orElseThrow(()->new ResourceNotFoundException("No hay reportes con título similar."));
 
     }
 
