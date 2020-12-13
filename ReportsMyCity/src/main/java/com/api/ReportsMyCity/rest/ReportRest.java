@@ -111,4 +111,26 @@ public class ReportRest {
         }
     }
 
+    @RequestMapping(value = "state/{report}",method = RequestMethod.PUT)
+    public void deleteReportUpdate(@PathVariable("report") Report report) throws ResourceNotFoundException, ApiOkException, Exception{
+
+        Optional<Report> optionalReport = reportRepo.findById(report.getId());
+
+        if(optionalReport.isPresent()) {
+            Report updateReport = optionalReport.get();
+            updateReport.setDescription(report.getDescription());
+            updateReport.setPrivacy(report.getPrivacy());
+            updateReport.setState("Eliminado");
+
+            if(reportRepo.save(updateReport) != null) {
+                throw new ApiOkException("Reporte eliminado exitosamente.");
+            }else {
+                throw new Exception("Error al eliminar el reporte.");
+            }
+        }else {
+            throw new ResourceNotFoundException("Error, el reporte no existe.");
+        }
+    }
+
+
 }

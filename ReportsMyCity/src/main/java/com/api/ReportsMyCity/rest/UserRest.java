@@ -104,4 +104,22 @@ public class UserRest {
 
     }
 
+    @RequestMapping(value = "state/",method = RequestMethod.PUT)
+    public void deleteUserUpdate(@RequestBody User user) throws ApiOkException, ResourceNotFoundException, Exception{
+
+        Optional<User> optionalUser = userRepo.findById(user.getId());
+        if(optionalUser.isPresent()){
+            User updateUser = optionalUser.get();
+            updateUser.setRole("Inactivo");
+
+            if(userRepo.save(updateUser)!= null){
+                throw new ApiOkException("Eliminado correctamente");
+            }else {
+                throw new Exception("Error al eliminar el usuario");
+            }
+        }else{
+            throw new ResourceNotFoundException("Error, este usuario no exite");
+        }
+    }
+
 }
