@@ -49,13 +49,6 @@ public class ReportRest {
 
     }
 
-    @RequestMapping(value = "/contains/{title}", method = RequestMethod.GET) // contains/{title}
-    public Report getReportByTitle(@PathVariable("title") String title){
-
-        return this.reportRepo.findByTitle(title).orElseThrow(()->new ResourceNotFoundException("No hay reportes con título similar."));
-
-    }
-
     @PostMapping
     public void createReport(@RequestBody Report report) throws ResourceNotFoundException, ApiOkException, Exception{
 

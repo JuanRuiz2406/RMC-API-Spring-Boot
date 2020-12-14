@@ -12,7 +12,4 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     @Transactional (readOnly = true)
     Optional<Report> findByUser(User user);
 
-    @Transactional (readOnly = true)
-    Optional<Report> findByTitle(String title);
-
 }
