@@ -1,5 +1,6 @@
 package com.api.ReportsMyCity.rest;
 
+import com.api.ReportsMyCity.entity.Municipality;
 import com.api.ReportsMyCity.entity.Report;
 import com.api.ReportsMyCity.entity.User;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
@@ -47,6 +48,23 @@ public class ReportRest {
 
         return this.reportRepo.findByUser(user).orElseThrow(()->new ResourceNotFoundException("Este usuario no posee reportes."));
 
+    }
+
+    @RequestMapping(value = "/bymuni/{muni}", method = RequestMethod.GET) //bymuni/{muni}
+    public ResponseEntity<List<Report>> getReportsByMuni(@PathVariable("muni")Municipality muni){
+        List<Report> reportsMuni = reportRepo.findByMuni(muni);
+        if(reportsMuni.isEmpty()){
+            throw new ResourceNotFoundException("Municipalidad no posee reportes");
+        }
+        return ResponseEntity.ok(reportsMuni);
+    }
+
+    public ResponseEntity<List<Report>> getReportsByState(@PathVariable("state") String state){
+        List<Report> reportsState = reportRepo.findByState(state);
+        if(reportsState.isEmpty()){
+            throw new ResourceNotFoundException("No hay reportes");
+        }
+        return ResponseEntity.ok(reportsState);
     }
 
     @PostMapping

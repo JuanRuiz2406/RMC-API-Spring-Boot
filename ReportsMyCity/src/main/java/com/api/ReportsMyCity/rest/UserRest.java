@@ -38,6 +38,16 @@ public class UserRest {
         return this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("Error, este usuario no existe."));
     }
 
+    @RequestMapping(value = "{userIdCard}", method = RequestMethod.GET) //user/{userIdCard}
+    public User getUserByIdCard(@PathVariable("userIdCard") String userIdCard) throws Exception{
+        User userTemp = userRepo.findByIdCard(userIdCard);
+        if(userTemp != null){
+            throw new Exception("No existe el usuario");
+        }else{
+            return userTemp;
+        }
+    }
+
     @PostMapping // user
     public void createUser(@RequestBody User user) throws ApiOkException, Exception, ApiUnproccessableEntityException{
 
