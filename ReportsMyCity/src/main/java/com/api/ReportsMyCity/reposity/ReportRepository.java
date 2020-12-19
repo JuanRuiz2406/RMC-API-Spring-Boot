@@ -15,7 +15,7 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     Optional<Report> findByUser(User user);
 
     @Transactional (readOnly = true)
-    List<Report> findByMuni(Municipality muni);
+    List<Report> findByMunicipality(Municipality municipality);
 
     @Transactional (readOnly = true)
     List<Report> findByState(String state);

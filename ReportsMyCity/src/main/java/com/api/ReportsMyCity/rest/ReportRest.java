@@ -51,12 +51,12 @@ public class ReportRest {
     }
 
     @RequestMapping(value = "/bymuni/{muni}", method = RequestMethod.GET) //bymuni/{muni}
-    public ResponseEntity<List<Report>> getReportsByMuni(@PathVariable("muni")Municipality muni){
-        List<Report> reportsMuni = reportRepo.findByMuni(muni);
-        if(reportsMuni.isEmpty()){
+    public ResponseEntity<List<Report>> getReportsByMunicipality(@PathVariable("muni")Municipality municipality){
+        List<Report> reportsMunicipality = reportRepo.findByMunicipality(municipality);
+        if(reportsMunicipality.isEmpty()){
             throw new ResourceNotFoundException("Municipalidad no posee reportes");
         }
-        return ResponseEntity.ok(reportsMuni);
+        return ResponseEntity.ok(reportsMunicipality);
     }
 
     public ResponseEntity<List<Report>> getReportsByState(@PathVariable("state") String state){
