@@ -48,6 +48,33 @@ public class UserRest {
         }
     }
 
+    public void createUserAdmin(@RequestBody User user) throws ApiOkException, Exception, ResourceNotFoundException{
+        user.setRole("admin");
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        for(ConstraintViolation<User> violation2 : violations) {
+            throw new ApiUnproccessableEntityException(violation2.getMessage());
+        }
+
+        User optionalUser = userRepo.findByEmail(user.getEmail());
+
+        if (optionalUser != null) {
+            String mailString = optionalUser.getEmail();
+            if (!mailString.equals(user.getEmail())) { // Creo que está validación esta de más.
+                userRepo.save(user);
+                throw new ApiOkException("Usuario guardado exitosamente.");
+            }else {
+                throw new Exception("Error, otro usuario posee este correo electrónico.");
+            }
+        }else {
+            userRepo.save(user);
+            throw new ApiOkException("Usuario guardado exitosamente.");
+        }
+    }
+
     @PostMapping // user
     public void createUser(@RequestBody User user) throws ApiOkException, Exception, ApiUnproccessableEntityException{
 

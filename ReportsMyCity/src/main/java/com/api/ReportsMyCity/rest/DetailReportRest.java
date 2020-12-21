@@ -1,8 +1,11 @@
 package com.api.ReportsMyCity.rest;
 
 import com.api.ReportsMyCity.entity.DetailReport;
+import com.api.ReportsMyCity.entity.Report;
+import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.reposity.DetailReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,15 @@ public class DetailReportRest {
 
         List<DetailReport> detailReports = detailRepo.findAll();
         return ResponseEntity.ok(detailReports);
+    }
+    @RequestMapping(value = "{report}", method = RequestMethod.GET)
+    public ResponseEntity<List<DetailReport>> getDetailReportByReport(@PathVariable("report") Report report){
+
+        List<DetailReport> detailReportList = detailRepo.findByReport(report);
+        if(detailReportList.isEmpty()){
+            throw new ResourceNotFoundException("No existe comentarios");
+        }
+        return ResponseEntity.ok(detailReportList);
     }
 
     @RequestMapping(value = "{detailReportId}", method = RequestMethod.GET) // detailReports/{detailReportID}
