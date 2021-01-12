@@ -5,12 +5,9 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.reposity.PhotographyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -23,19 +20,23 @@ import java.util.Set;
 @RequestMapping("photography")
 public class photographyRest {
 
-    @Autowired
-    private PhotographyRepository photoRepo;
+    private final PhotographyRepository photographyRepository;
 
-    @GetMapping
-    public ResponseEntity<List<Photography>> getPhotographys() {
-        List<Photography> photos = photoRepo.findAll();
-        if(photos.isEmpty()) {
-            throw new ResourceNotFoundException("No hay imágenes.");
-        }
-        return ResponseEntity.ok(photos);
+    public photographyRest(PhotographyRepository photographyRepository) {
+        this.photographyRepository = photographyRepository;
     }
 
-    public void createPhoto(@RequestBody Photography photo) throws ResourceNotFoundException, ApiOkException, Exception {
+    @GetMapping
+    public ResponseEntity<List<Photography>> getAll() {
+        List<Photography> photographs = photographyRepository.findAll();
+        if(photographs.isEmpty()) {
+            throw new ResourceNotFoundException("No hay imágenes.");
+        }
+        return ResponseEntity.ok(photographs);
+    }
+
+    @PostMapping
+    public void create(@RequestBody Photography photo, MultipartFile File) throws ResourceNotFoundException, ApiOkException, Exception {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -44,7 +45,7 @@ public class photographyRest {
             throw new ApiUnproccessableEntityException(violation2.getMessage());
         }
 
-        if(photoRepo.save(photo) != null) {
+        if(photographyRepository.save(photo) != null) {
             throw new ApiOkException("Imagen guardada exitosamente.");
         }else {
             throw new Exception("Error al guardar la imagen.");

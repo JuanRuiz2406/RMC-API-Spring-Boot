@@ -4,8 +4,6 @@ import com.api.ReportsMyCity.entity.DetailReport;
 import com.api.ReportsMyCity.entity.Report;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.reposity.DetailReportRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,49 +14,53 @@ import java.util.Optional;
 @RequestMapping("detailReport")
 public class DetailReportRest {
 
-    @Autowired
-    private DetailReportRepository detailRepo;
+    private final DetailReportRepository detailReportRepository;
 
-    @GetMapping // detailReport/
-    public ResponseEntity<List<DetailReport>> getDetailReport() {
-
-        List<DetailReport> detailReports = detailRepo.findAll();
-        return ResponseEntity.ok(detailReports);
-    }
-    @RequestMapping(value = "{report}", method = RequestMethod.GET)
-    public ResponseEntity<List<DetailReport>> getDetailReportByReport(@PathVariable("report") Report report){
-
-        List<DetailReport> detailReportList = detailRepo.findByReport(report);
-        if(detailReportList.isEmpty()){
-            throw new ResourceNotFoundException("No existe comentarios");
-        }
-        return ResponseEntity.ok(detailReportList);
+    public DetailReportRest(DetailReportRepository detailReportRepository) {
+        this.detailReportRepository = detailReportRepository;
     }
 
-    @RequestMapping(value = "{detailReportId}", method = RequestMethod.GET) // detailReports/{detailReportID}
-    public ResponseEntity<DetailReport> getDetailReportById(@PathVariable("detailReportId") int detailReportId){
+    @GetMapping
+    public ResponseEntity<List<DetailReport>> getAll() {
 
-        Optional<DetailReport> optionalDetailReport = detailRepo.findById(detailReportId);
+        List<DetailReport> details = detailReportRepository.findAll();
+        return ResponseEntity.ok(details);
+    }
 
-        if(optionalDetailReport.isPresent()) {
-            return ResponseEntity.ok(optionalDetailReport.get());
+    @GetMapping(value = "{detailReportId}")
+    public ResponseEntity<DetailReport> getById(@PathVariable("detailReportId") int detailReportId){
+
+        Optional<DetailReport> DetailById = detailReportRepository.findById(detailReportId);
+
+        if(DetailById.isPresent()) {
+            return ResponseEntity.ok(DetailById.get());
         }else {
             return ResponseEntity.noContent().build();
         }
 
     }
 
-    @PostMapping // No tiene msjs
-    public ResponseEntity<DetailReport> createDetailReport(@RequestBody DetailReport detailReport){
+    @GetMapping(value = "/byReport/{report}")
+    public ResponseEntity<List<DetailReport>> getByReport(@PathVariable("report") Report report){
 
-        DetailReport newDetailReport = detailRepo.save(detailReport);
-        return ResponseEntity.ok(newDetailReport);
+        List<DetailReport> detailsByReport = detailReportRepository.findByReport(report);
+        if(detailsByReport.isEmpty()){
+            throw new ResourceNotFoundException("No existen detalles");
+        }
+        return ResponseEntity.ok(detailsByReport);
     }
 
-    @DeleteMapping(value = "{detailReportId}") // No tiene msjs
-    public ResponseEntity<DetailReport> deleteDetailReport(@PathVariable("detailReportId") int detailReportId) {
+    @PostMapping // No tiene msjs ni validaciones
+    public ResponseEntity<DetailReport> create(@RequestBody DetailReport detailReport){
 
-        detailRepo.deleteById(detailReportId);
+        DetailReport newDetail = detailReportRepository.save(detailReport);
+        return ResponseEntity.ok(newDetail);
+    }
+
+    @DeleteMapping(value = "{detailReportId}") // No tiene msjs ni validaciones
+    public ResponseEntity<DetailReport> delete(@PathVariable("detailReportId") int detailReportId) {
+
+        detailReportRepository.deleteById(detailReportId);
         return ResponseEntity.ok(null);
     }
 

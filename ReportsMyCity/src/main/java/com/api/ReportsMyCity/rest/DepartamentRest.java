@@ -2,7 +2,6 @@ package com.api.ReportsMyCity.rest;
 
 import com.api.ReportsMyCity.entity.DepartamentMunicipality;
 import com.api.ReportsMyCity.reposity.DepartamentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,62 +12,66 @@ import java.util.Optional;
 @RequestMapping("departament")
 public class DepartamentRest {
 
-    @Autowired
-    private DepartamentRepository departmentRepo;
+    private final DepartamentRepository departamentRepository;
 
-    // Msjs
+    public DepartamentRest(DepartamentRepository departamentRepository) {
+        this.departamentRepository = departamentRepository;
+    }
 
-    @GetMapping// departments/
-    public ResponseEntity<List<DepartamentMunicipality>> getDepartments(){
+    // Faltan Msjs
 
-        List<DepartamentMunicipality> departaments = departmentRepo.findAll();
+    @GetMapping
+    public ResponseEntity<List<DepartamentMunicipality>> getAll(){
+
+        List<DepartamentMunicipality> departaments = departamentRepository.findAll();
         return ResponseEntity.ok(departaments);
     }
 
-    @RequestMapping(value = "{depaID}", method = RequestMethod.GET) // departments/{depaId}/
-    public ResponseEntity<DepartamentMunicipality> getDepaById(@PathVariable("depaID") int depaID){
+    @GetMapping(value = "/byId/{departamentId}")
+    public ResponseEntity<DepartamentMunicipality> getById(@PathVariable("departamentId") int departamentId){
 
-        Optional<DepartamentMunicipality> optionalDepartament = departmentRepo.findById(depaID);
+        Optional<DepartamentMunicipality> departamentById = departamentRepository.findById(departamentId);
 
-        if(optionalDepartament.isPresent()) {
-            return ResponseEntity.ok(optionalDepartament.get());
+        if(departamentById.isPresent()) {
+            return ResponseEntity.ok(departamentById.get());
         }else {
             return ResponseEntity.noContent().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<DepartamentMunicipality> createDepartament(@RequestBody DepartamentMunicipality depa){
+    public ResponseEntity<DepartamentMunicipality> create(@RequestBody DepartamentMunicipality departament){
 
-        DepartamentMunicipality newDepartmentMunicipality = departmentRepo.save(depa);
-        return ResponseEntity.ok(newDepartmentMunicipality);
-    }
-
-    @DeleteMapping(value = "{depaId}")
-    public ResponseEntity<DepartamentMunicipality> deleteDepartment(@PathVariable("depaId") int depaId){
-
-        departmentRepo.deleteById(depaId);
-        return ResponseEntity.ok(null);
+        DepartamentMunicipality newDepartament = departamentRepository.save(departament);
+        return ResponseEntity.ok(newDepartament);
     }
 
     @PutMapping
-    public ResponseEntity<DepartamentMunicipality> updateDepartament(@RequestBody DepartamentMunicipality depa){
+    public ResponseEntity<DepartamentMunicipality> update(@RequestBody DepartamentMunicipality departamentChanges){
 
-        Optional<DepartamentMunicipality> optionalDepartment = departmentRepo.findById(depa.getId());
+        Optional<DepartamentMunicipality> existingDepartament = departamentRepository.findById(departamentChanges.getId());
 
-        if(optionalDepartment.isPresent()) {
-            DepartamentMunicipality updateDepartment = optionalDepartment.get();
-            updateDepartment.setDescription(depa.getDescription());
-            updateDepartment.setEmail(depa.getEmail());
-            updateDepartment.setName(depa.getName());
-            updateDepartment.setSchedule(depa.getSchedule());
-            updateDepartment.setTelephone(depa.getTelephone());
+        if(existingDepartament.isPresent()) {
+            DepartamentMunicipality updateDepartament = existingDepartament.get();
+            updateDepartament.setDescription(departamentChanges.getDescription());
+            updateDepartament.setEmail(departamentChanges.getEmail());
+            updateDepartament.setName(departamentChanges.getName());
+            updateDepartament.setSchedule(departamentChanges.getSchedule());
+            updateDepartament.setTelephone(departamentChanges.getTelephone());
 
-            departmentRepo.save(updateDepartment);
-            return ResponseEntity.ok(updateDepartment);
+            departamentRepository.save(updateDepartament);
+            return ResponseEntity.ok(updateDepartament);
         }else {
             return ResponseEntity.notFound().build();
 
         }
     }
+
+    @DeleteMapping(value = "{departamentId}")
+    public ResponseEntity<DepartamentMunicipality> delete(@PathVariable("departamentId") int departamentId){
+
+        departamentRepository.deleteById(departamentId);
+        return ResponseEntity.ok(null);
+    }
+
 }

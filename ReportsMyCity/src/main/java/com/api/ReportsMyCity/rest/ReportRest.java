@@ -7,7 +7,6 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.reposity.ReportRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,96 +22,85 @@ import java.util.Set;
 @RequestMapping("report")
 public class ReportRest {
 
-    @Autowired
-    private ReportRepository reportRepo;
+    private final ReportRepository reportRepository;
 
-    @GetMapping // report/
-    public ResponseEntity<List<Report>> getReport() throws ResourceNotFoundException {
+    public ReportRest(ReportRepository reportRepository) {
+        this.reportRepository = reportRepository;
+    }
 
-        List<Report> reports = reportRepo.findAll();
+    @GetMapping
+    public ResponseEntity<List<Report>> getAll() throws ResourceNotFoundException {
+
+        List<Report> reports = reportRepository.findAll();
         if(reports.isEmpty()) {
             throw new ResourceNotFoundException("No hay reportes registrados.");
         }
         return ResponseEntity.ok(reports);
     }
 
-    @RequestMapping(value = "{reportId}", method = RequestMethod.GET) // reports/{reportId}
-    public Report getReportById(@PathVariable("reportId") int reportId){
+    @GetMapping(value = "{reportId}")
+    public Report getById(@PathVariable("reportId") int reportId){
 
-        return this.reportRepo.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
+        return this.reportRepository.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
 
     }
 
-    @RequestMapping(value = "/by/{user}", method = RequestMethod.GET) // by/{user}
+    @GetMapping(value = "/byUser/{user}")
     public Report getReportByUser(@PathVariable("user") User user){
 
-        return this.reportRepo.findByUser(user).orElseThrow(()->new ResourceNotFoundException("Este usuario no posee reportes."));
+        return this.reportRepository.findByUser(user).orElseThrow(()->new ResourceNotFoundException("Este usuario no posee reportes."));
 
     }
 
-    @RequestMapping(value = "/bymuni/{muni}", method = RequestMethod.GET) //bymuni/{muni}
-    public ResponseEntity<List<Report>> getReportsByMunicipality(@PathVariable("muni")Municipality municipality){
-        List<Report> reportsMunicipality = reportRepo.findByMunicipality(municipality);
+    @GetMapping(value = "/byMunicipality/{muni}")
+    public ResponseEntity<List<Report>> getByMunicipality(@PathVariable("muni")Municipality municipality){
+        List<Report> reportsMunicipality = reportRepository.findByMunicipality(municipality);
         if(reportsMunicipality.isEmpty()){
             throw new ResourceNotFoundException("Municipalidad no posee reportes");
         }
         return ResponseEntity.ok(reportsMunicipality);
     }
 
-    public ResponseEntity<List<Report>> getReportsByState(@PathVariable("state") String state){
-        List<Report> reportsState = reportRepo.findByState(state);
-        if(reportsState.isEmpty()){
-            throw new ResourceNotFoundException("No hay reportes");
+    @GetMapping(value = "/byState/{state}")
+    public ResponseEntity<List<Report>> getByState(@PathVariable("state") String state){
+        List<Report> reportsByState = reportRepository.findByState(state);
+        if(reportsByState.isEmpty()){
+            throw new ResourceNotFoundException("No hay reportes que posean el estado: " + state);
         }
-        return ResponseEntity.ok(reportsState);
+        return ResponseEntity.ok(reportsByState);
     }
 
     @PostMapping
-    public void createReport(@RequestBody Report report) throws ResourceNotFoundException, ApiOkException, Exception{
+    public void create(@RequestBody Report report) throws ResourceNotFoundException, ApiOkException, Exception{
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        Set<ConstraintViolation<Report>> violation = validator.validate(report);
-        for(ConstraintViolation<Report> violation2 : violation) {
-            throw new ApiUnproccessableEntityException(violation2.getMessage());
+        Set<ConstraintViolation<Report>> violations = validator.validate(report);
+        for(ConstraintViolation<Report> violation : violations) {
+            throw new ApiUnproccessableEntityException(violation.getMessage());
         }
 
-        if(reportRepo.save(report) != null) {
+        if(reportRepository.save(report) != null) {
             throw new ApiOkException("Reporte guardado exitosamente.");
         }else {
             throw new Exception("Error al guardar el reporte.");
         }
 
-
-    }
-
-    @DeleteMapping(value = "{reportId}")
-    public ResponseEntity<Report> deleteReport(@PathVariable("reportId") int reportId) {
-
-        Optional<Report> report = reportRepo.findById(reportId);
-
-        if(!report.isPresent()) {
-            throw new ResourceNotFoundException("Digite un reporte correcto");
-        }else {
-            reportRepo.deleteById(reportId);
-            throw new ApiOkException("Reporte eliminado exitosamente.");
-        }
-
     }
 
     @PutMapping
-    public void updateReport(@RequestBody Report report) throws ResourceNotFoundException, ApiOkException, Exception{
+    public void update(@RequestBody Report reportChanges) throws ResourceNotFoundException, ApiOkException, Exception{
 
-        Optional<Report> optionalReport = reportRepo.findById(report.getId());
+        Optional<Report> existingReport = reportRepository.findById(reportChanges.getId());
 
-        if(optionalReport.isPresent()) {
-            Report updateReport = optionalReport.get();
-            updateReport.setDescription(report.getDescription());
-            updateReport.setPrivacy(report.getPrivacy());
-            updateReport.setState(report.getState());
+        if(existingReport.isPresent()) {
+            Report updateReport = existingReport.get();
+            updateReport.setDescription(reportChanges.getDescription());
+            updateReport.setPrivacy(reportChanges.getPrivacy());
+            updateReport.setState(reportChanges.getState());
 
-            if(reportRepo.save(updateReport) != null) {
+            if(reportRepository.save(updateReport) != null) {
                 throw new ApiOkException("Reporte actualizado exitosamente.");
             }else {
                 throw new Exception("Error al actualizar el reporte.");
@@ -122,10 +110,24 @@ public class ReportRest {
         }
     }
 
-    @RequestMapping(value = "state/{report}",method = RequestMethod.PUT)
+    @DeleteMapping(value = "{reportId}")
+    public ResponseEntity<Report> delete(@PathVariable("reportId") int reportId) {
+
+        Optional<Report> deleteReport = reportRepository.findById(reportId);
+
+        if(!deleteReport.isPresent()) {
+            throw new ResourceNotFoundException("Digite un reporte correcto");
+        }else {
+            reportRepository.deleteById(reportId);
+            throw new ApiOkException("Reporte eliminado exitosamente.");
+        }
+
+    }
+
+    @PutMapping(value = "state/{report}") //???
     public void deleteReportUpdate(@PathVariable("report") Report report) throws ResourceNotFoundException, ApiOkException, Exception{
 
-        Optional<Report> optionalReport = reportRepo.findById(report.getId());
+        Optional<Report> optionalReport = reportRepository.findById(report.getId());
 
         if(optionalReport.isPresent()) {
             Report updateReport = optionalReport.get();
@@ -133,7 +135,7 @@ public class ReportRest {
             updateReport.setPrivacy(report.getPrivacy());
             updateReport.setState("Eliminado");
 
-            if(reportRepo.save(updateReport) != null) {
+            if(reportRepository.save(updateReport) != null) {
                 throw new ApiOkException("Reporte eliminado exitosamente.");
             }else {
                 throw new Exception("Error al eliminar el reporte.");
@@ -142,6 +144,5 @@ public class ReportRest {
             throw new ResourceNotFoundException("Error, el reporte no existe.");
         }
     }
-
 
 }
