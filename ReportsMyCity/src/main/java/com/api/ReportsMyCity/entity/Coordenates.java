@@ -1,6 +1,7 @@
 package com.api.ReportsMyCity.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "coordenates")
@@ -10,10 +11,12 @@ public class Coordenates {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 100)
+    @NotBlank(message = "La latitud es obligatoria")
+    @Column(length = 100, nullable = false)
     private String latitude;
 
-    @Column(length = 100)
+    @NotBlank(message = "La longitud es obligatoria")
+    @Column(length = 100, nullable = false)
     private String longitude;
 
     public int getId() {
