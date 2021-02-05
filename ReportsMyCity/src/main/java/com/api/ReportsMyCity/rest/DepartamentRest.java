@@ -1,7 +1,7 @@
 package com.api.ReportsMyCity.rest;
 
 import com.api.ReportsMyCity.entity.DepartamentMunicipality;
-import com.api.ReportsMyCity.reposity.DepartamentRepository;
+import com.api.ReportsMyCity.repository.DepartamentRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

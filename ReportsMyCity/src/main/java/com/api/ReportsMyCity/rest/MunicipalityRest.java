@@ -4,7 +4,7 @@ import com.api.ReportsMyCity.entity.Municipality;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
-import com.api.ReportsMyCity.reposity.MunicipalityRepository;
+import com.api.ReportsMyCity.repository.MunicipalityRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

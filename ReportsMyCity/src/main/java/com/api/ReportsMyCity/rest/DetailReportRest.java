@@ -3,7 +3,7 @@ package com.api.ReportsMyCity.rest;
 import com.api.ReportsMyCity.entity.DetailReport;
 import com.api.ReportsMyCity.entity.Report;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
-import com.api.ReportsMyCity.reposity.DetailReportRepository;
+import com.api.ReportsMyCity.repository.DetailReportRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

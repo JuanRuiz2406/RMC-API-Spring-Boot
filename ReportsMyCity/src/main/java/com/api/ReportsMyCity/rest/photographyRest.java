@@ -4,7 +4,7 @@ import com.api.ReportsMyCity.entity.Photography;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
-import com.api.ReportsMyCity.reposity.PhotographyRepository;
+import com.api.ReportsMyCity.repository.PhotographyRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

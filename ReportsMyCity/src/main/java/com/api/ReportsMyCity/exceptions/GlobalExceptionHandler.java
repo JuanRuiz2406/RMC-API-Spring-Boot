@@ -9,22 +9,22 @@ import org.springframework.web.context.request.WebRequest;
 import java.sql.Date;
 
 @ControllerAdvice
-public class GlobalExceptionHendler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> hendleResourceNotException(ResourceNotFoundException exception, WebRequest request){
+    public ResponseEntity<?> handleResourceNotException(ResourceNotFoundException exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(0), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ApiOkException.class)
-    public ResponseEntity<?> hendleApiOktException(ApiOkException exception, WebRequest request){
+    public ResponseEntity<?> handleApiOktException(ApiOkException exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(0), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity(errorDetails, HttpStatus.OK);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> hendleGlobalException(Exception exception, WebRequest request){
+    public ResponseEntity<?> handleGlobalException(Exception exception, WebRequest request){
         ErrorDetails errorDetails = new ErrorDetails(new Date(0), exception.getMessage(), request.getDescription(false));
         return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }

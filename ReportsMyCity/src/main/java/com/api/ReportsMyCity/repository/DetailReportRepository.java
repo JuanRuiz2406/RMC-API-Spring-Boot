@@ -1,4 +1,4 @@
-package com.api.ReportsMyCity.reposity;
+package com.api.ReportsMyCity.repository;
 
 import com.api.ReportsMyCity.entity.DetailReport;
 import com.api.ReportsMyCity.entity.Report;
