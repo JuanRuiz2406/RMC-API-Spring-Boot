@@ -18,11 +18,11 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("photography")
-public class photographyRest {
+public class PhotographyRest {
 
     private final PhotographyRepository photographyRepository;
 
-    public photographyRest(PhotographyRepository photographyRepository) {
+    public PhotographyRest(PhotographyRepository photographyRepository) {
         this.photographyRepository = photographyRepository;
     }
 

@@ -45,7 +45,7 @@ public class CoordenatesRest {
     }
 
     @PostMapping
-    public void create(@RequestBody Coordenates coordenates) throws ResourceNotFoundException, ApiOkException, Exception{
+    public Coordenates create(@RequestBody Coordenates coordenates) throws ResourceNotFoundException, ApiOkException, Exception{
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -55,8 +55,10 @@ public class CoordenatesRest {
             throw new ApiUnproccessableEntityException(violation.getMessage());
         }
 
-        if(coordenatesRepository.save(coordenates) != null) {
-            throw new ApiOkException("Ubicación guardada exitosamente.");
+        Coordenates savedCoordenates = coordenatesRepository.save(coordenates);
+
+        if(savedCoordenates != null) {
+            return savedCoordenates;
         }else {
             throw new ResourceNotFoundException("Error al guardar la ubicación.");
         }

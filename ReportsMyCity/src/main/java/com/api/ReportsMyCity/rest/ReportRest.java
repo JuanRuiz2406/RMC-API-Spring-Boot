@@ -1,5 +1,6 @@
 package com.api.ReportsMyCity.rest;
 
+import com.api.ReportsMyCity.entity.Coordenates;
 import com.api.ReportsMyCity.entity.Municipality;
 import com.api.ReportsMyCity.entity.Report;
 import com.api.ReportsMyCity.entity.User;
@@ -23,9 +24,12 @@ import java.util.Set;
 public class ReportRest {
 
     private final ReportRepository reportRepository;
+    private CoordenatesRest coordenatesRest;
+    private PhotographyRest photographyRest;
 
-    public ReportRest(ReportRepository reportRepository) {
+    public ReportRest(ReportRepository reportRepository, CoordenatesRest coordenatesRest) {
         this.reportRepository = reportRepository;
+        this.coordenatesRest = coordenatesRest;
     }
 
     @GetMapping
@@ -72,6 +76,10 @@ public class ReportRest {
 
     @PostMapping
     public void create(@RequestBody Report report) throws ResourceNotFoundException, ApiOkException, Exception{
+
+        Coordenates newCoordenates = report.getCoordenates();
+        Coordenates savedCoordenates = coordenatesRest.create(newCoordenates);
+        report.setCoordenates(savedCoordenates);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
