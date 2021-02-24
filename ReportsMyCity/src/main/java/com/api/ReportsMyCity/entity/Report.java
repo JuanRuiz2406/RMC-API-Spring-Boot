@@ -20,7 +20,8 @@ public class Report {
     @Column(length = 100, nullable = false)
     private String description;
 
-    @Column(length = 45)
+    @NotBlank(message = "El estado es obligatorio")
+    @Column(length = 45, nullable = false)
     private String state;
 
     @NotBlank(message = "La privacidad es obligatoria")

@@ -44,9 +44,9 @@ public class UserRest {
     public User getByIdCard(@PathVariable("userIdCard") String userIdCard) throws Exception{
         User userTemp = userRepository.findByIdCard(userIdCard);
         if(userTemp != null){
-            throw new Exception("No existe el usuario");
-        }else{
             return userTemp;
+        }else{
+            throw new Exception("No existe el usuario");
         }
     }
 
