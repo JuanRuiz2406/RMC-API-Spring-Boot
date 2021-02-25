@@ -25,11 +25,13 @@ public class ReportRest {
 
     private final ReportRepository reportRepository;
     private CoordenatesRest coordenatesRest;
+    private CityRest cityRest;
     private PhotographyRest photographyRest;
 
-    public ReportRest(ReportRepository reportRepository, CoordenatesRest coordenatesRest) {
+    public ReportRest(ReportRepository reportRepository, CoordenatesRest coordenatesRest, CityRest cityRest) {
         this.reportRepository = reportRepository;
         this.coordenatesRest = coordenatesRest;
+        this.cityRest = cityRest;
     }
 
     @GetMapping
@@ -74,12 +76,15 @@ public class ReportRest {
         return ResponseEntity.ok(reportsByState);
     }
 
-    @PostMapping
-    public void create(@RequestBody Report report) throws ResourceNotFoundException, ApiOkException, Exception{
+    @PostMapping(value = "/city/{cityName}")
+    public void create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws ResourceNotFoundException, ApiOkException, Exception{
 
         Coordenates newCoordenates = report.getCoordenates();
         Coordenates savedCoordenates = coordenatesRest.create(newCoordenates);
         report.setCoordenates(savedCoordenates);
+
+        Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName);
+        report.setMunicipality(municipalityFound);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
