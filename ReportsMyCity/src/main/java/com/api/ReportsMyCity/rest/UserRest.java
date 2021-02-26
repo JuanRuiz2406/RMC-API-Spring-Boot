@@ -50,6 +50,17 @@ public class UserRest {
         }
     }
 
+    @GetMapping(value = "/byEmail/{userEmail}")
+    public User getByEmail(@PathVariable("userEmail") String userEmail) throws Exception{
+        User userTemp = userRepository.findByEmail(userEmail);
+        if(userTemp != null){
+            return userTemp;
+        }else{
+            throw new Exception("No existe un usuario con este correo");
+        }
+
+    }
+
     @PostMapping
     public void createUser(@RequestBody User user) throws ApiOkException, Exception, ApiUnproccessableEntityException{
 
