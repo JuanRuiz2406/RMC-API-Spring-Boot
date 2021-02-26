@@ -69,13 +69,13 @@ public class UserRest {
             String existingEmail = UserWhitExistingEmail.getEmail();
             if (!existingEmail.equals(user.getEmail())) { // Creo que esta validación está de más. * ver como esta en municipality
                 userRepository.save(user);
-                throw new ApiOkException("Usuario guardado exitosamente.");
+                throw new ApiOkException("ok");
             }else {
                 throw new Exception("Error, otro usuario posee este correo electrónico.");
             }
         }else { // Si == nulo guardar, una de las 2 esta sobrando
             userRepository.save(user);
-            throw new ApiOkException("Usuario guardado exitosamente.");
+            throw new ApiOkException("ok");
         }
     }
 
