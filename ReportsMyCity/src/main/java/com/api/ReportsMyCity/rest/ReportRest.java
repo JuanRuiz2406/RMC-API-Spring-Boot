@@ -8,6 +8,7 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.ReportRepository;
+import com.api.ReportsMyCity.rest.UserRest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +28,13 @@ public class ReportRest {
     private CoordenatesRest coordenatesRest;
     private CityRest cityRest;
     private PhotographyRest photographyRest;
+    private UserRest userRest;
 
-    public ReportRest(ReportRepository reportRepository, CoordenatesRest coordenatesRest, CityRest cityRest) {
+    public ReportRest(ReportRepository reportRepository, CoordenatesRest coordenatesRest, CityRest cityRest, UserRest userRest) {
         this.reportRepository = reportRepository;
         this.coordenatesRest = coordenatesRest;
         this.cityRest = cityRest;
+        this.userRest = userRest;
     }
 
     @GetMapping
@@ -51,11 +54,14 @@ public class ReportRest {
 
     }
 
-    @GetMapping(value = "/byUser/{user}")
-    public Report getReportByUser(@PathVariable("user") User user){
-
-        return this.reportRepository.findByUser(user).orElseThrow(()->new ResourceNotFoundException("Este usuario no posee reportes."));
-
+    @GetMapping(value = "/byUserIdCard/{userIdCard}")
+    public ResponseEntity<List<Report>> getByUserIdCard(@PathVariable("userIdCard") String userIdCard) throws Exception {
+        User userFound = userRest.getByIdCard(userIdCard);
+        List<Report> userReports = reportRepository.findByUser(userFound);
+        if(userReports.isEmpty()){
+            throw new ResourceNotFoundException("Este usuario no posee reportes.");
+        }
+        return ResponseEntity.ok(userReports);
     }
 
     @GetMapping(value = "/byMunicipality/{muni}")

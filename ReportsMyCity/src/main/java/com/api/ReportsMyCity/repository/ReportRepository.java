@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     @Transactional (readOnly = true)
-    Optional<Report> findByUser(User user);
+    List<Report> findByUser(User user);
 
     @Transactional (readOnly = true)
     List<Report> findByMunicipality(Municipality municipality);

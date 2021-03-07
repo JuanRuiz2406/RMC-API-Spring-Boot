@@ -42,9 +42,9 @@ public class UserRest {
 
     @GetMapping(value = "/byIdCard/{userIdCard}")
     public User getByIdCard(@PathVariable("userIdCard") String userIdCard) throws Exception{
-        User userTemp = userRepository.findByIdCard(userIdCard);
-        if(userTemp != null){
-            return userTemp;
+        User userFound = userRepository.findByIdCard(userIdCard);
+        if(userFound != null){
+            return userFound;
         }else{
             throw new Exception("No existe el usuario");
         }
