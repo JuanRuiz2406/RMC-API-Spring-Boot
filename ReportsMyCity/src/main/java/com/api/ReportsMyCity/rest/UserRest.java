@@ -5,7 +5,9 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.UserRepository;
+import com.api.ReportsMyCity.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
@@ -21,9 +23,11 @@ import java.util.Set;
 public class UserRest {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserRest(UserRepository userRepository) {
+    public UserRest(UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -51,8 +55,8 @@ public class UserRest {
     }
 
     @GetMapping(value = "/byEmail/{userEmail}")
-    public User getByEmail(@PathVariable("userEmail") String userEmail) throws Exception{
-        User userTemp = userRepository.findByEmail(userEmail);
+    public UserDetails getByEmail(@PathVariable("userEmail") String userEmail) throws Exception{
+        UserDetails userTemp = userService.loadUserByUsername(userEmail);
         if(userTemp != null){
             return userTemp;
         }else{
