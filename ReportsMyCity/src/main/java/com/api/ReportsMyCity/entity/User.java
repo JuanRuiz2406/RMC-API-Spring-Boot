@@ -33,7 +33,7 @@ public class User implements Serializable {
     private String email;
 
     @NotBlank(message = "La contraseña es obligatoria")
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @Column(length = 45)
@@ -41,6 +41,19 @@ public class User implements Serializable {
 
     @Column(length = 100)
     private String direction;
+
+    public User(int id, @NotBlank(message = "La tarjeta de identificacion es obligatoria") String idCard, @NotBlank(message = "El nombre es obligatorio") String name, @NotBlank(message = "El apellido es obligatorio") String lastname, @NotBlank(message = "El correo es obligatorio") @Email(message = "El correo tiene un formato invalido") String email, @NotBlank(message = "La contraseña es obligatoria") String password) {
+        this.id = id;
+        this.idCard = idCard;
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User() {
+
+    }
 
     public int getId() {
         return id;

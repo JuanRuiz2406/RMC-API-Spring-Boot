@@ -5,9 +5,7 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.UserRepository;
-import com.api.ReportsMyCity.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolation;
@@ -23,11 +21,9 @@ import java.util.Set;
 public class UserRest {
 
     private final UserRepository userRepository;
-    private final UserService userService;
 
-    public UserRest(UserRepository userRepository, UserService userService) {
+    public UserRest(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.userService = userService;
     }
 
     @GetMapping
@@ -54,15 +50,16 @@ public class UserRest {
         }
     }
 
-    @GetMapping(value = "/byEmail/{userEmail}")
-    public UserDetails getByEmail(@PathVariable("userEmail") String userEmail) throws Exception{
-        UserDetails userTemp = userService.loadUserByUsername(userEmail);
-        if(userTemp != null){
-            return userTemp;
-        }else{
-            throw new Exception("No existe un usuario con este correo");
-        }
+    public User getByEmail(String userEmail) throws Exception{
+            return userRepository.findByEmail(userEmail);
+    }
 
+    public boolean getExistsByEmail(String userEmail){
+        return userRepository.existsByEmail(userEmail);
+    }
+
+    public boolean getExistsByIdCard(String userIdCard){
+        return userRepository.existsByEmail(userIdCard);
     }
 
     @PostMapping
