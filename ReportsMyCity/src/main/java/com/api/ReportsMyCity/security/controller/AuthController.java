@@ -49,7 +49,7 @@ public class AuthController {
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Message("Campos mal rellenado binding"), HttpStatus.BAD_REQUEST);
         if(userRest.getExistsByEmail(newUser.getEmail()))
-            return new ResponseEntity(new Message("Ese nombre ya existe"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Ese correo ya existe"), HttpStatus.BAD_REQUEST);
         User user =
                 new User(0,newUser.getIdCard(),newUser.getName(),newUser.getLastName(), newUser.getEmail(), passwordEncoder.encode(newUser.getPassword()));
         user.setRole("user");
