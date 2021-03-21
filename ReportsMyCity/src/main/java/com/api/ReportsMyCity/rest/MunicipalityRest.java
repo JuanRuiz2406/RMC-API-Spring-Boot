@@ -5,6 +5,8 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.MunicipalityRepository;
+import com.api.ReportsMyCity.security.dto.Message;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +31,7 @@ public class MunicipalityRest {
     @GetMapping
     public ResponseEntity<List<Municipality>> getAll() throws ResourceNotFoundException {
         List<Municipality> municipalities = municipalityRepository.findAll();
-        if(municipalities.isEmpty()) {
-            throw new ResourceNotFoundException("No hay municipalidades registradas.");
-        }else {
-            return ResponseEntity.ok(municipalities);
-        }
+        return ResponseEntity.ok(municipalities);
     }
 
     @GetMapping(value = "{municipalityId}")
@@ -42,32 +40,32 @@ public class MunicipalityRest {
     }
 
     @PostMapping
-    public void create(@RequestBody Municipality municipality) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity create(@RequestBody Municipality municipality) throws ResourceNotFoundException, ApiOkException, Exception{
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<Municipality>> violations = validator.validate(municipality);
         for(ConstraintViolation<Municipality> violation : violations) {
-            throw new ApiUnproccessableEntityException(violation.getMessage());
+            return new ResponseEntity(new Message(violation.getMessage()), HttpStatus.BAD_REQUEST);
         }
 
         Municipality existingEmail = municipalityRepository.findByEmail(municipality.getEmail());
         Municipality existingName = municipalityRepository.findByName(municipality.getName());
 
         if(existingEmail !=  null) {
-            throw new Exception("Error, otra municipalidad posee este correo electrónico.");
+            return new ResponseEntity(new Message("Error, ya existe una municipalidad con este correo"), HttpStatus.BAD_REQUEST);
         }else if(existingName != null){
-            throw new Exception("Error, otra municipalidad posee este nombre.");
+            return new ResponseEntity(new Message("Error, otra municipalidad posee este nombre."), HttpStatus.BAD_REQUEST);
         }else {
             municipalityRepository.save(municipality);
-            throw new ApiOkException("Municipalidad guardada exitosamente.");
+            return new ResponseEntity(new Message("Municipalidad guardada exitosamente"), HttpStatus.OK);
         }
 
     }
 
     @PutMapping
-    public void update(@RequestBody Municipality municipalityChanges) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity update(@RequestBody Municipality municipalityChanges) throws ResourceNotFoundException, ApiOkException, Exception{
 
         Optional<Municipality> existingMunicipality = municipalityRepository.findById(municipalityChanges.getId());
 
@@ -84,32 +82,32 @@ public class MunicipalityRest {
                     updateMunicipality.setWebSite(municipalityChanges.getWebSite());
 
                     if(municipalityRepository.save(updateMunicipality) != null) {
-                        throw new ApiOkException("Municipalidad actualizada exitosamente.");
+                        return new ResponseEntity(new Message("Municipalidad actualizada correctamente"), HttpStatus.OK);
                     }else {
-                        throw new Exception("Error al actualizar la municipalidad.");
+                        return new ResponseEntity(new Message("Error al actualizar la municipalidad."), HttpStatus.BAD_REQUEST);
                     }
                 }else {
-                    throw new ResourceNotFoundException("Introduzca un correo electrónico.");
+                    return new ResponseEntity(new Message("Introduzca un correo electronico correcto."), HttpStatus.BAD_REQUEST);
                 }
             }else {
-                throw new ResourceNotFoundException("Introduzca un nombre válido.");
+                return new ResponseEntity(new Message("Introduzca un nombre de municipalidad correcto."), HttpStatus.BAD_REQUEST);
             }
 
         }else {
-            throw new ResourceNotFoundException("Error, esta municipalidad no existe.");
+            return new ResponseEntity(new Message("Error, la municipalidad no existe."), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping(value = "{municipalityId}")
-    public void delete(@PathVariable("municipalityId") int municipalityId) throws ResourceNotFoundException, ApiOkException{
+    public ResponseEntity delete(@PathVariable("municipalityId") int municipalityId) throws ResourceNotFoundException, ApiOkException{
 
         Optional<Municipality> deleteMunicipality = municipalityRepository.findById(municipalityId);
 
         if(deleteMunicipality.isPresent()) {
             municipalityRepository.deleteById(municipalityId);
-            throw new ApiOkException("Municipalidad eliminada exitosamente.");
+            return new ResponseEntity(new Message("La municipalidad se elimino exitosamente"), HttpStatus.OK);
         }else {
-            throw new ResourceNotFoundException("Error, esta municipalidad no existe.");
+            return new ResponseEntity(new Message("Error, Municipalidad no existe"), HttpStatus.BAD_REQUEST);
         }
     }
 

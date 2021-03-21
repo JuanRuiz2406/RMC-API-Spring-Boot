@@ -9,6 +9,8 @@ import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.ReportRepository;
 import com.api.ReportsMyCity.rest.UserRest;
+import com.api.ReportsMyCity.security.dto.Message;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,28 +40,22 @@ public class ReportRest {
     }
 
     @GetMapping
-    public ResponseEntity<List<Report>> getAll() throws ResourceNotFoundException {
-
+    public ResponseEntity<List<Report>> getAll() {
         List<Report> reports = reportRepository.findAll();
-        if(reports.isEmpty()) {
-            throw new ResourceNotFoundException("No hay reportes registrados.");
-        }
         return ResponseEntity.ok(reports);
     }
 
     @GetMapping(value = "{reportId}")
     public Report getById(@PathVariable("reportId") int reportId){
-
         return this.reportRepository.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
-
     }
 
     @GetMapping(value = "/byUserIdCard/{userIdCard}")
     public ResponseEntity<List<Report>> getByUserIdCard(@PathVariable("userIdCard") String userIdCard) throws Exception {
-        User userFound = userRest.getByIdCard(userIdCard);
+        User userFound = userRest.getByIdCard(userIdCard).getBody();
         List<Report> userReports = reportRepository.findByUser(userFound);
         if(userReports.isEmpty()){
-            throw new ResourceNotFoundException("Este usuario no posee reportes.");
+            return new ResponseEntity(new Message("Usuario no cuenta con reportes"), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(userReports);
     }
@@ -68,7 +64,7 @@ public class ReportRest {
     public ResponseEntity<List<Report>> getByMunicipality(@PathVariable("muni")Municipality municipality){
         List<Report> reportsMunicipality = reportRepository.findByMunicipality(municipality);
         if(reportsMunicipality.isEmpty()){
-            throw new ResourceNotFoundException("Municipalidad no posee reportes");
+            return new ResponseEntity(new Message("Municipalidad no tiene reportes"), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(reportsMunicipality);
     }
@@ -77,13 +73,13 @@ public class ReportRest {
     public ResponseEntity<List<Report>> getByState(@PathVariable("state") String state){
         List<Report> reportsByState = reportRepository.findByState(state);
         if(reportsByState.isEmpty()){
-            throw new ResourceNotFoundException("No hay reportes que posean el estado: " + state);
+            return new ResponseEntity(new Message("No Existen reportes con el estado: " + state), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(reportsByState);
     }
 
     @PostMapping(value = "/city/{cityName}")
-    public void create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws ResourceNotFoundException, ApiOkException, Exception{
 
         Coordenates newCoordenates = report.getCoordenates();
         Coordenates savedCoordenates = coordenatesRest.create(newCoordenates);
@@ -97,19 +93,19 @@ public class ReportRest {
 
         Set<ConstraintViolation<Report>> violations = validator.validate(report);
         for(ConstraintViolation<Report> violation : violations) {
-            throw new ApiUnproccessableEntityException(violation.getMessage());
+            return new ResponseEntity(new Message(violation.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if(reportRepository.save(report) != null) {
-            throw new ApiOkException("Reporte guardado exitosamente.");
+            return new ResponseEntity(new Message("Reporte guardado exitosamente"), HttpStatus.OK);
         }else {
-            throw new Exception("Error al guardar el reporte.");
+            return new ResponseEntity(new Message("Error al crear reporte"), HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @PutMapping
-    public void update(@RequestBody Report reportChanges) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity update(@RequestBody Report reportChanges) throws ResourceNotFoundException, ApiOkException, Exception{
 
         Optional<Report> existingReport = reportRepository.findById(reportChanges.getId());
 
@@ -120,12 +116,12 @@ public class ReportRest {
             updateReport.setState(reportChanges.getState());
 
             if(reportRepository.save(updateReport) != null) {
-                throw new ApiOkException("Reporte actualizado exitosamente.");
+                return new ResponseEntity(new Message("Reporte actualizado exitosamente"), HttpStatus.OK);
             }else {
-                throw new Exception("Error al actualizar el reporte.");
+                return new ResponseEntity(new Message("Error al actualizar reporte"), HttpStatus.BAD_REQUEST);
             }
         }else {
-            throw new ResourceNotFoundException("Error, el reporte no existe.");
+            return new ResponseEntity(new Message("Error al actualizar reporte"), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -135,16 +131,16 @@ public class ReportRest {
         Optional<Report> deleteReport = reportRepository.findById(reportId);
 
         if(!deleteReport.isPresent()) {
-            throw new ResourceNotFoundException("Digite un reporte correcto");
+            return new ResponseEntity(new Message("Seleccione una reporte correcto"), HttpStatus.BAD_REQUEST);
         }else {
             reportRepository.deleteById(reportId);
-            throw new ApiOkException("Reporte eliminado exitosamente.");
+            return new ResponseEntity(new Message("Reporte eliminado correctamente"), HttpStatus.OK);
         }
 
     }
 
     @PutMapping(value = "state/{report}") //???
-    public void deleteReportUpdate(@PathVariable("report") Report report) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity deleteReportUpdate(@PathVariable("report") Report report) throws ResourceNotFoundException, ApiOkException, Exception{
 
         Optional<Report> optionalReport = reportRepository.findById(report.getId());
 
@@ -155,12 +151,12 @@ public class ReportRest {
             updateReport.setState("Eliminado");
 
             if(reportRepository.save(updateReport) != null) {
-                throw new ApiOkException("Reporte eliminado exitosamente.");
+                return new ResponseEntity(new Message("Reporte eliminado correctamente"), HttpStatus.OK);
             }else {
-                throw new Exception("Error al eliminar el reporte.");
+                return new ResponseEntity(new Message("Error al eliminar el reporte"), HttpStatus.BAD_REQUEST);
             }
         }else {
-            throw new ResourceNotFoundException("Error, el reporte no existe.");
+            return new ResponseEntity(new Message("Error al eliminar el reporte"), HttpStatus.BAD_REQUEST);
         }
     }
 

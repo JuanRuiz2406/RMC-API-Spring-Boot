@@ -5,6 +5,8 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.PhotographyRepository;
+import com.api.ReportsMyCity.security.dto.Message;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,26 +31,23 @@ public class PhotographyRest {
     @GetMapping
     public ResponseEntity<List<Photography>> getAll() {
         List<Photography> photographs = photographyRepository.findAll();
-        if(photographs.isEmpty()) {
-            throw new ResourceNotFoundException("No hay imágenes.");
-        }
         return ResponseEntity.ok(photographs);
     }
 
     @PostMapping
-    public void create(@RequestBody Photography photo, MultipartFile File) throws ResourceNotFoundException, ApiOkException, Exception {
+    public ResponseEntity create(@RequestBody Photography photo, MultipartFile File) throws ResourceNotFoundException, ApiOkException, Exception {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<Photography>> violation = validator.validate(photo);
         for(ConstraintViolation<Photography> violation2 : violation) {
-            throw new ApiUnproccessableEntityException(violation2.getMessage());
+            return new ResponseEntity(new Message(violation2.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if(photographyRepository.save(photo) != null) {
-            throw new ApiOkException("Imagen guardada exitosamente.");
+            return new ResponseEntity(new Message("Imagen guardada exitosamente."), HttpStatus.OK);
         }else {
-            throw new Exception("Error al guardar la imagen.");
+            return new ResponseEntity(new Message("Error al guardar la imagen."), HttpStatus.BAD_REQUEST);
         }
     }
 }

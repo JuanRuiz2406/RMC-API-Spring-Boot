@@ -2,6 +2,8 @@ package com.api.ReportsMyCity.rest;
 
 import com.api.ReportsMyCity.entity.DepartamentMunicipality;
 import com.api.ReportsMyCity.repository.DepartamentRepository;
+import com.api.ReportsMyCity.security.dto.Message;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +37,7 @@ public class DepartamentRest {
         if(departamentById.isPresent()) {
             return ResponseEntity.ok(departamentById.get());
         }else {
-            return ResponseEntity.noContent().build();
+            return new ResponseEntity(new Message("No existe departamento con ese id"), HttpStatus.NO_CONTENT);
         }
     }
 

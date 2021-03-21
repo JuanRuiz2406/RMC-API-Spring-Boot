@@ -5,6 +5,8 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.CityRepository;
+import com.api.ReportsMyCity.security.dto.Message;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,51 +30,46 @@ public class CityRest {
 
     @GetMapping
     public ResponseEntity<List<City>> getAll() throws ResourceNotFoundException {
-
         List<City> cities = cityRepository.findAll();
-        if(cities.isEmpty()) {
-            throw new ResourceNotFoundException("No hay ciudades registradas.");
-        }
         return ResponseEntity.ok(cities);
-
     }
 
     @GetMapping(value = "/byName/{cityName}")
-    public Municipality getMunicipalityByCityName(@PathVariable("cityName") String cityName) throws Exception{
+    public ResponseEntity<Municipality> getMunicipalityByCityName(@PathVariable("cityName") String cityName) throws Exception{
 
         City city = cityRepository.findByName(cityName);
         if(city != null){
-            return city.getMunicipality();
+            return ResponseEntity.ok(city.getMunicipality());
         }else{
-            throw new Exception("Esta ciudad no existe en el sistema");
+            return new ResponseEntity(new Message("Esta ciudad no existe en el sistema"), HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @PostMapping
-    public void create(@RequestBody City city) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity create(@RequestBody City city) throws ResourceNotFoundException, ApiOkException, Exception{
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<City>> violations = validator.validate(city);
         for(ConstraintViolation<City> violation : violations) {
-            throw new ApiUnproccessableEntityException(violation.getMessage());
+            return new ResponseEntity(new Message(violation.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         City existingName = cityRepository.findByName(city.getName());
 
         if(existingName !=  null) {
-            throw new Exception("Error, otra ciudad posee este nombre.");
+            return new ResponseEntity(new Message("Error, otra ciudad posee este nombre."), HttpStatus.BAD_REQUEST);
         }else {
             cityRepository.save(city);
-            throw new ApiOkException("Ciudad guardada exitosamente.");
+            return new ResponseEntity(new Message("Ciudad guardada exitosamente."), HttpStatus.OK);
         }
 
     }
 
     @PutMapping
-    public void update(@RequestBody City cityChanges) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity update(@RequestBody City cityChanges) throws ResourceNotFoundException, ApiOkException, Exception{
 
         Optional<City> existingCity = cityRepository.findById(cityChanges.getId());
         if (existingCity.isPresent()) {
@@ -81,15 +78,15 @@ public class CityRest {
             updateCity.setMunicipality(cityChanges.getMunicipality());
 
             if(updateCity.getName().isEmpty()){
-                throw new ResourceNotFoundException("Error, ingrese el nombre.");
+                return new ResponseEntity(new Message("Error, ingrese el nombre."), HttpStatus.BAD_REQUEST);
             }else if(cityRepository.save(updateCity)!=null) {
-                throw new ApiOkException("Ciudad actualizada correctamente.");
+                return new ResponseEntity(new Message("Ciudad actualizada correctamente."), HttpStatus.OK);
             }else {
-                throw new Exception("Error al actualizar la ciudad.");
+                return new ResponseEntity(new Message("Error al actualizar la ciudad."), HttpStatus.BAD_REQUEST);
             }
 
         }else {
-            throw new ResourceNotFoundException("Error, esta ciudad no se encuentra en el sistema.");
+            return new ResponseEntity(new Message("Error, esta ciudad no se encuentra en el sistema."), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -100,10 +97,10 @@ public class CityRest {
         Optional<City> deleteCity = cityRepository.findById(cityId);
 
         if(!deleteCity.isPresent()) {
-            throw new ResourceNotFoundException("Ingrese una ciudad valida");
+            return new ResponseEntity(new Message("Ingrese una ciudad valid"), HttpStatus.BAD_REQUEST);
         }else {
             cityRepository.deleteById(cityId);
-            throw new ApiOkException("Ciudad eliminada exitosamente.");
+            return new ResponseEntity(new Message("Ciudad eliminada exitosamente"), HttpStatus.OK);
         }
 
     }

@@ -5,6 +5,8 @@ import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.CoordenatesRepository;
+import com.api.ReportsMyCity.security.dto.Message;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +29,9 @@ public class CoordenatesRest {
     }
 
     @GetMapping
-    public ResponseEntity<List<Coordenates>> getAll() throws ResourceNotFoundException {
+    public ResponseEntity<List<Coordenates>> getAll() {
 
         List<Coordenates> coordenates = coordenatesRepository.findAll();
-        if(coordenates.isEmpty()) {
-            throw new ResourceNotFoundException("No hay ubicaciones registradas.");
-        }
         return ResponseEntity.ok(coordenates);
 
     }
@@ -45,7 +44,7 @@ public class CoordenatesRest {
     }
 
     @PostMapping
-    public Coordenates create(@RequestBody Coordenates coordenates) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity<Coordenates> create(@RequestBody Coordenates coordenates) throws Exception{
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -58,15 +57,15 @@ public class CoordenatesRest {
         Coordenates savedCoordenates = coordenatesRepository.save(coordenates);
 
         if(savedCoordenates != null) {
-            return savedCoordenates;
+            return ResponseEntity.ok(savedCoordenates);
         }else {
-            throw new ResourceNotFoundException("Error al guardar la ubicación.");
+            return new ResponseEntity(new Message("Error al guardar las coordenadas"), HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @PutMapping
-    public void update(@RequestBody Coordenates coordenatesChanges) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity update(@RequestBody Coordenates coordenatesChanges){
 
         Optional<Coordenates> existingCoordenates = coordenatesRepository.findById(coordenatesChanges.getId());
         if (existingCoordenates.isPresent()) {
@@ -75,17 +74,17 @@ public class CoordenatesRest {
             updateCoordenates.setLongitude(coordenatesChanges.getLongitude());
 
             if(updateCoordenates.getLatitude().isEmpty()){
-                throw new ResourceNotFoundException("Error, introduzca la latitud.");
+                return new ResponseEntity(new Message("Error, introduzca la latitud."), HttpStatus.BAD_REQUEST);
             }else if(updateCoordenates.getLongitude().isEmpty()) {
-                throw new ResourceNotFoundException("Error, introduzca la longitud.");
+                return new ResponseEntity(new Message("Error, introduzca la longitud."), HttpStatus.BAD_REQUEST);
             }else if(coordenatesRepository.save(updateCoordenates)!=null) {
-                throw new ApiOkException("Ubicación actualizada correctamente.");
+                return new ResponseEntity(new Message("Ubicacion actualizada correctamente."), HttpStatus.OK);
             }else {
-                throw new Exception("Error al actualizar la ubicación.");
+                return new ResponseEntity(new Message("Error al actualizar la ubicacion."), HttpStatus.BAD_REQUEST);
             }
 
         }else {
-            throw new ResourceNotFoundException("Error, esta ubicación no existe.");
+            return new ResponseEntity(new Message("Error, esta ubicación no existe."), HttpStatus.BAD_REQUEST);
         }
 
     }
