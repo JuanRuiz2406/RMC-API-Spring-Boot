@@ -59,7 +59,7 @@ public class CoordenatesRest {
         if(savedCoordenates != null) {
             return ResponseEntity.ok(savedCoordenates);
         }else {
-            return new ResponseEntity(new Message("Error al guardar las coordenadas"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al guardar hubicacion", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -74,17 +74,17 @@ public class CoordenatesRest {
             updateCoordenates.setLongitude(coordenatesChanges.getLongitude());
 
             if(updateCoordenates.getLatitude().isEmpty()){
-                return new ResponseEntity(new Message("Error, introduzca la latitud."), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error, introduzca la latitud.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }else if(updateCoordenates.getLongitude().isEmpty()) {
-                return new ResponseEntity(new Message("Error, introduzca la longitud."), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error, introduzca la longitud.", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }else if(coordenatesRepository.save(updateCoordenates)!=null) {
-                return new ResponseEntity(new Message("Ubicacion actualizada correctamente."), HttpStatus.OK);
+                return new ResponseEntity(new Message("Ubicacion actualizada correctamente.", HttpStatus.OK), HttpStatus.OK);
             }else {
-                return new ResponseEntity(new Message("Error al actualizar la ubicacion."), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error al actualizar la ubicacion.", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
 
         }else {
-            return new ResponseEntity(new Message("Error, esta ubicación no existe."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error, esta ubicación no existe.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
 
     }

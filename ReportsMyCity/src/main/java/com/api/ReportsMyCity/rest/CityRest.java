@@ -41,7 +41,7 @@ public class CityRest {
         if(city != null){
             return ResponseEntity.ok(city.getMunicipality());
         }else{
-            return new ResponseEntity(new Message("Esta ciudad no existe en el sistema"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Esta ciudad no existe en el sistema",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -54,16 +54,16 @@ public class CityRest {
 
         Set<ConstraintViolation<City>> violations = validator.validate(city);
         for(ConstraintViolation<City> violation : violations) {
-            return new ResponseEntity(new Message(violation.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity(new Message(violation.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         City existingName = cityRepository.findByName(city.getName());
 
         if(existingName !=  null) {
-            return new ResponseEntity(new Message("Error, otra ciudad posee este nombre."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error, otra ciudad posee este nombre.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }else {
             cityRepository.save(city);
-            return new ResponseEntity(new Message("Ciudad guardada exitosamente."), HttpStatus.OK);
+            return new ResponseEntity(new Message("Ciudad guardada exitosamente.", HttpStatus.OK), HttpStatus.OK);
         }
 
     }
@@ -78,15 +78,15 @@ public class CityRest {
             updateCity.setMunicipality(cityChanges.getMunicipality());
 
             if(updateCity.getName().isEmpty()){
-                return new ResponseEntity(new Message("Error, ingrese el nombre."), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error, ingrese el nombre.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }else if(cityRepository.save(updateCity)!=null) {
-                return new ResponseEntity(new Message("Ciudad actualizada correctamente."), HttpStatus.OK);
+                return new ResponseEntity(new Message("Ciudad actualizada correctamente.", HttpStatus.OK), HttpStatus.OK);
             }else {
-                return new ResponseEntity(new Message("Error al actualizar la ciudad."), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error al actualizar la ciudad.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
 
         }else {
-            return new ResponseEntity(new Message("Error, esta ciudad no se encuentra en el sistema."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error, esta ciudad no se encuentra en el sistema.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -97,10 +97,10 @@ public class CityRest {
         Optional<City> deleteCity = cityRepository.findById(cityId);
 
         if(!deleteCity.isPresent()) {
-            return new ResponseEntity(new Message("Ingrese una ciudad valid"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Ingrese una ciudad valid", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }else {
             cityRepository.deleteById(cityId);
-            return new ResponseEntity(new Message("Ciudad eliminada exitosamente"), HttpStatus.OK);
+            return new ResponseEntity(new Message("Ciudad eliminada exitosamente", HttpStatus.OK), HttpStatus.OK);
         }
 
     }

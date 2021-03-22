@@ -55,7 +55,7 @@ public class ReportRest {
         User userFound = userRest.getByIdCard(userIdCard).getBody();
         List<Report> userReports = reportRepository.findByUser(userFound);
         if(userReports.isEmpty()){
-            return new ResponseEntity(new Message("Usuario no cuenta con reportes"), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("Usuario no cuenta con reportes", HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(userReports);
     }
@@ -64,7 +64,7 @@ public class ReportRest {
     public ResponseEntity<List<Report>> getByMunicipality(@PathVariable("muni")Municipality municipality){
         List<Report> reportsMunicipality = reportRepository.findByMunicipality(municipality);
         if(reportsMunicipality.isEmpty()){
-            return new ResponseEntity(new Message("Municipalidad no tiene reportes"), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("Municipalidad no tiene reportes",HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(reportsMunicipality);
     }
@@ -73,19 +73,19 @@ public class ReportRest {
     public ResponseEntity<List<Report>> getByState(@PathVariable("state") String state){
         List<Report> reportsByState = reportRepository.findByState(state);
         if(reportsByState.isEmpty()){
-            return new ResponseEntity(new Message("No Existen reportes con el estado: " + state), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("No Existen reportes con el estado: " + state, HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(reportsByState);
     }
 
     @PostMapping(value = "/city/{cityName}")
-    public ResponseEntity create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
 
         Coordenates newCoordenates = report.getCoordenates();
-        Coordenates savedCoordenates = coordenatesRest.create(newCoordenates);
+        Coordenates savedCoordenates = coordenatesRest.create(newCoordenates).getBody();
         report.setCoordenates(savedCoordenates);
 
-        Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName);
+        Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName).getBody();
         report.setMunicipality(municipalityFound);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -93,19 +93,19 @@ public class ReportRest {
 
         Set<ConstraintViolation<Report>> violations = validator.validate(report);
         for(ConstraintViolation<Report> violation : violations) {
-            return new ResponseEntity(new Message(violation.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity(new Message(violation.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if(reportRepository.save(report) != null) {
-            return new ResponseEntity(new Message("Reporte guardado exitosamente"), HttpStatus.OK);
+            return new ResponseEntity(new Message("Reporte guardado exitosamente",HttpStatus.OK), HttpStatus.OK);
         }else {
-            return new ResponseEntity(new Message("Error al crear reporte"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al crear reporte",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @PutMapping
-    public ResponseEntity update(@RequestBody Report reportChanges) throws ResourceNotFoundException, ApiOkException, Exception{
+    public ResponseEntity update(@RequestBody Report reportChanges){
 
         Optional<Report> existingReport = reportRepository.findById(reportChanges.getId());
 
@@ -116,12 +116,12 @@ public class ReportRest {
             updateReport.setState(reportChanges.getState());
 
             if(reportRepository.save(updateReport) != null) {
-                return new ResponseEntity(new Message("Reporte actualizado exitosamente"), HttpStatus.OK);
+                return new ResponseEntity(new Message("Reporte actualizado exitosamente",HttpStatus.OK), HttpStatus.OK);
             }else {
-                return new ResponseEntity(new Message("Error al actualizar reporte"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error al actualizar reporte",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
         }else {
-            return new ResponseEntity(new Message("Error al actualizar reporte"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al actualizar reporte",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -131,10 +131,10 @@ public class ReportRest {
         Optional<Report> deleteReport = reportRepository.findById(reportId);
 
         if(!deleteReport.isPresent()) {
-            return new ResponseEntity(new Message("Seleccione una reporte correcto"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Seleccione una reporte correcto",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }else {
             reportRepository.deleteById(reportId);
-            return new ResponseEntity(new Message("Reporte eliminado correctamente"), HttpStatus.OK);
+            return new ResponseEntity(new Message("Reporte eliminado correctamente",HttpStatus.OK), HttpStatus.OK);
         }
 
     }
@@ -151,12 +151,12 @@ public class ReportRest {
             updateReport.setState("Eliminado");
 
             if(reportRepository.save(updateReport) != null) {
-                return new ResponseEntity(new Message("Reporte eliminado correctamente"), HttpStatus.OK);
+                return new ResponseEntity(new Message("Reporte eliminado correctamente",HttpStatus.OK), HttpStatus.OK);
             }else {
-                return new ResponseEntity(new Message("Error al eliminar el reporte"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error al eliminar el reporte",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
         }else {
-            return new ResponseEntity(new Message("Error al eliminar el reporte"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al eliminar el reporte",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 

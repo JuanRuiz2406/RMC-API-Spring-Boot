@@ -50,7 +50,7 @@ public class UserRest {
         if(userFound != null){
             return new ResponseEntity(userFound, HttpStatus.OK);
         }else{
-            return new ResponseEntity(new Message("No se encontro el usuario"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("No se encontro el usuario",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -59,7 +59,7 @@ public class UserRest {
         if (user != null)
             return new ResponseEntity(user,HttpStatus.OK);
         else
-            return new ResponseEntity(new Message("El usuario no existe"), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("El usuario no existe",HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
     }
 
     public boolean getExistsByEmail(String userEmail){
@@ -85,13 +85,13 @@ public class UserRest {
             String existingEmail = UserWhitExistingEmail.getEmail();
             if (!existingEmail.equals(user.getEmail())) { // Creo que esta validación está de más. * ver como esta en municipality
                 userRepository.save(user);
-                return new ResponseEntity(new Message("Usuario guardado"), HttpStatus.CREATED);
+                return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED), HttpStatus.CREATED);
             }else {
-                return new ResponseEntity(new Message("Error al guardar, ya existe el usuario"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
         }else { // Si == nulo guardar, una de las 2 esta sobrando
             userRepository.save(user);
-            return new ResponseEntity(new Message("Usuario guardado"), HttpStatus.CREATED);
+            return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED), HttpStatus.CREATED);
         }
     }
 
@@ -113,13 +113,13 @@ public class UserRest {
             String mailString = optionalUser.getEmail();
             if (!mailString.equals(user.getEmail())) {
                 userRepository.save(user);
-                return new ResponseEntity(new Message("Usuario guardado"), HttpStatus.CREATED);
+                return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED), HttpStatus.CREATED);
             }else {
-                return new ResponseEntity(new Message("Error al guardar, ya existe el usuario"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
         }else {
             userRepository.save(user);
-            return new ResponseEntity(new Message("Usuario guardado"), HttpStatus.CREATED);
+            return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED), HttpStatus.CREATED);
         }
     }
 
@@ -137,12 +137,12 @@ public class UserRest {
             updateUser.setDirection(user.getDirection());
 
             if(userRepository.save(updateUser)!= null){
-                return new ResponseEntity(new Message("Usuario actualizado"), HttpStatus.CREATED);
+                return new ResponseEntity(new Message("Usuario actualizado",HttpStatus.CREATED), HttpStatus.CREATED);
             }else {
-                return new ResponseEntity(new Message("Error aL actualizar el usuario"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error aL actualizar el usuario",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
         }else {
-            return new ResponseEntity(new Message("Usuario No existe"), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("Usuario No existe",HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
         }
 
     }
@@ -153,10 +153,10 @@ public class UserRest {
         Optional<User> user = userRepository.findById(userId);
 
         if(!user.isPresent()) {
-            return new ResponseEntity(new Message("Error al eliminar usuario"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al eliminar usuario",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }else {
             userRepository.deleteById(userId);
-            return new ResponseEntity(new Message("Usuario Eliminado Exitosamente"), HttpStatus.OK);
+            return new ResponseEntity(new Message("Usuario Eliminado Exitosamente",HttpStatus.OK), HttpStatus.OK);
         }
     }
 
@@ -169,12 +169,12 @@ public class UserRest {
             updateUser.setRole("Inactivo");
 
             if(userRepository.save(updateUser)!= null){
-                return new ResponseEntity(new Message("Usuario Eliminado Exitosamente"), HttpStatus.OK);
+                return new ResponseEntity(new Message("Usuario Eliminado Exitosamente",HttpStatus.OK), HttpStatus.OK);
             }else {
-                return new ResponseEntity(new Message("Error al eliminar usuario"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Error al eliminar usuario",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
             }
         }else{
-            return new ResponseEntity(new Message("Error al eliminar usuario, usuario no existe"), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al eliminar usuario, usuario no existe",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 

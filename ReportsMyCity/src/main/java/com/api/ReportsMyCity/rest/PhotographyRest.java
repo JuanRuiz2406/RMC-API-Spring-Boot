@@ -35,19 +35,19 @@ public class PhotographyRest {
     }
 
     @PostMapping
-    public ResponseEntity create(@RequestBody Photography photo, MultipartFile File) throws ResourceNotFoundException, ApiOkException, Exception {
+    public ResponseEntity create(@RequestBody Photography photo, MultipartFile File) {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<Photography>> violation = validator.validate(photo);
         for(ConstraintViolation<Photography> violation2 : violation) {
-            return new ResponseEntity(new Message(violation2.getMessage()), HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity(new Message(violation2.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if(photographyRepository.save(photo) != null) {
-            return new ResponseEntity(new Message("Imagen guardada exitosamente."), HttpStatus.OK);
+            return new ResponseEntity(new Message("Imagen guardada exitosamente.",HttpStatus.OK), HttpStatus.OK);
         }else {
-            return new ResponseEntity(new Message("Error al guardar la imagen."), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al guardar la imagen.", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
         }
     }
 }
