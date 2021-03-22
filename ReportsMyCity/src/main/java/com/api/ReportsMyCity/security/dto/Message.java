@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 public class Message {
     private String message;
 
-    private HttpStatus code;
+    private int code;
 
-    public Message(String message, HttpStatus code) {
+    public Message(String message, int code) {
         this.message = message;
         this.code = code;
     }
@@ -20,11 +20,11 @@ public class Message {
         this.message = message;
     }
 
-    public HttpStatus getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(HttpStatus code) {
+    public void setCode(int code) {
         this.code = code;
     }
 }

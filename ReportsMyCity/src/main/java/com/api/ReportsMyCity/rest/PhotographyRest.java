@@ -41,13 +41,13 @@ public class PhotographyRest {
 
         Set<ConstraintViolation<Photography>> violation = validator.validate(photo);
         for(ConstraintViolation<Photography> violation2 : violation) {
-            return new ResponseEntity(new Message(violation2.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY), HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity(new Message(violation2.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY.value()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         if(photographyRepository.save(photo) != null) {
-            return new ResponseEntity(new Message("Imagen guardada exitosamente.",HttpStatus.OK), HttpStatus.OK);
+            return new ResponseEntity(new Message("Imagen guardada exitosamente.",HttpStatus.OK.value()), HttpStatus.OK);
         }else {
-            return new ResponseEntity(new Message("Error al guardar la imagen.", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al guardar la imagen.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
     }
 }

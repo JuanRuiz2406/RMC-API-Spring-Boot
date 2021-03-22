@@ -47,19 +47,19 @@ public class MunicipalityRest {
 
         Set<ConstraintViolation<Municipality>> violations = validator.validate(municipality);
         for(ConstraintViolation<Municipality> violation : violations) {
-            return new ResponseEntity(new Message(violation.getMessage(),HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message(violation.getMessage(),HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
 
         Municipality existingEmail = municipalityRepository.findByEmail(municipality.getEmail());
         Municipality existingName = municipalityRepository.findByName(municipality.getName());
 
         if(existingEmail !=  null) {
-            return new ResponseEntity(new Message("Error, ya existe una municipalidad con este correo",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error, ya existe una municipalidad con este correo",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }else if(existingName != null){
-            return new ResponseEntity(new Message("Error, otra municipalidad posee este nombre.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error, otra municipalidad posee este nombre.",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }else {
             municipalityRepository.save(municipality);
-            return new ResponseEntity(new Message("Municipalidad guardada exitosamente",HttpStatus.OK), HttpStatus.OK);
+            return new ResponseEntity(new Message("Municipalidad guardada exitosamente",HttpStatus.OK.value()), HttpStatus.OK);
         }
 
     }
@@ -82,19 +82,19 @@ public class MunicipalityRest {
                     updateMunicipality.setWebSite(municipalityChanges.getWebSite());
 
                     if(municipalityRepository.save(updateMunicipality) != null) {
-                        return new ResponseEntity(new Message("Municipalidad actualizada correctamente",HttpStatus.OK), HttpStatus.OK);
+                        return new ResponseEntity(new Message("Municipalidad actualizada correctamente",HttpStatus.OK.value()), HttpStatus.OK);
                     }else {
-                        return new ResponseEntity(new Message("Error al actualizar la municipalidad.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+                        return new ResponseEntity(new Message("Error al actualizar la municipalidad.",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
                     }
                 }else {
-                    return new ResponseEntity(new Message("Introduzca un correo electronico correcto.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity(new Message("Introduzca un correo electronico correcto.",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
                 }
             }else {
-                return new ResponseEntity(new Message("Introduzca un nombre de municipalidad correcto.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("Introduzca un nombre de municipalidad correcto.",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
 
         }else {
-            return new ResponseEntity(new Message("Error, la municipalidad no existe.",HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error, la municipalidad no existe.",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -105,9 +105,9 @@ public class MunicipalityRest {
 
         if(deleteMunicipality.isPresent()) {
             municipalityRepository.deleteById(municipalityId);
-            return new ResponseEntity(new Message("La municipalidad se elimino exitosamente", HttpStatus.OK), HttpStatus.OK);
+            return new ResponseEntity(new Message("La municipalidad se elimino exitosamente", HttpStatus.OK.value()), HttpStatus.OK);
         }else {
-            return new ResponseEntity(new Message("Error, Municipalidad no existe", HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error, Municipalidad no existe", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -37,7 +37,7 @@ public class DepartamentRest {
         if(departamentById.isPresent()) {
             return ResponseEntity.ok(departamentById.get());
         }else {
-            return new ResponseEntity(new Message("No existe departamento con ese id", HttpStatus.NO_CONTENT), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("No existe departamento con ese id", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
     }
 
