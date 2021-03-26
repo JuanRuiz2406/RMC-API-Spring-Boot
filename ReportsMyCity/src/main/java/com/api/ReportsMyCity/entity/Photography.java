@@ -14,15 +14,16 @@ public class Photography {
     private String imagePath;
 
 
-    /*
-
-    *     @ManyToOne
+    @Column(length = 50)
+    private String category;
+/*
+    @ManyToOne
     @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne
     private Report reports;
-    * */
+*/
 
 
     public int getId() {
@@ -40,15 +41,14 @@ public class Photography {
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
-    /*
-    *     public String getCategory() {
+   public String getCategory() {
         return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
-
+/*
     public User getUser() { return user; }
 
     public void setUser(User user) {
@@ -62,6 +62,6 @@ public class Photography {
     public void setReports(Report reports) {
         this.reports = reports;
     }
-    * */
+*/
 
 }
