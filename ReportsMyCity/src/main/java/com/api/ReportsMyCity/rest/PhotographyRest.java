@@ -42,25 +42,38 @@ public class PhotographyRest {
     }
 
     @PostMapping
-    public void create( Photography photo, @RequestParam("File") MultipartFile file) throws ResourceNotFoundException, ApiOkException, Exception {
+    public void create(Photography photo, @RequestParam("Files") List<MultipartFile> files) throws ResourceNotFoundException, ApiOkException, Exception {
+        boolean flag = true;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
-        System.out.println(rootFolder);
-        File myFile = new File(rootFolder+file.getOriginalFilename());
-        myFile.createNewFile();
-        FileOutputStream fos =new FileOutputStream(myFile);
-        fos.write(file.getBytes());
-        fos.close();
-        Set<ConstraintViolation<Photography>> violation = validator.validate(photo);
-        for(ConstraintViolation<Photography> violation2 : violation) {
-            throw new ApiUnproccessableEntityException(violation2.getMessage());
+        for ( MultipartFile file : files){
+            System.out.println(rootFolder);
+            File myFile = new File(rootFolder+file.getOriginalFilename());
+            myFile.createNewFile();
+            FileOutputStream fos =new FileOutputStream(myFile);
+            fos.write(file.getBytes());
+            fos.close();
+            photo.setImagePath(rootFolder+file.getOriginalFilename());
+            photo.setId(photo.getId()+1);
+            Set<ConstraintViolation<Photography>> violation = validator.validate(photo);
+            for(ConstraintViolation<Photography> violation2 : violation) {
+                throw new ApiUnproccessableEntityException(violation2.getMessage());
+            }
+            if(photographyRepository.save(photo) != null) {
+                System.out.println("saved: " + photo.getImagePath());
+                flag = true;
+            }else {
+                flag = false;
+            }
         }
-        photo.setImagePath(rootFolder+file.getOriginalFilename());
-        if(photographyRepository.save(photo) != null) {
+
+        if(flag) {
             throw new ApiOkException("Imagen guardada exitosamente.");
         }else {
             throw new Exception("Error al guardar la imagen.");
         }
+
+
     }
 
 
