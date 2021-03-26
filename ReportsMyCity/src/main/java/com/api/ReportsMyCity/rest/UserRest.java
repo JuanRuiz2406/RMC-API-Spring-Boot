@@ -54,7 +54,9 @@ public class UserRest {
         }
     }
 
-    public ResponseEntity<User> getByEmail(String userEmail){
+    @CrossOrigin
+    @GetMapping(value = "/byEmail/{userEmail}")
+    public ResponseEntity<User> getByEmail(@PathVariable("userEmail") String userEmail){
         User user = userRepository.findByEmail(userEmail);
         if (user != null)
             return new ResponseEntity(user,HttpStatus.OK);
