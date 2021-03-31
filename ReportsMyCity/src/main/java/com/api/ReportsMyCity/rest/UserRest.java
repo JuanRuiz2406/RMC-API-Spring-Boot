@@ -29,6 +29,9 @@ public class UserRest {
 
     private final UserRepository userRepository;
 
+    //crear seeders
+
+
     public UserRest(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -71,8 +74,6 @@ public class UserRest {
     @PostMapping
     public ResponseEntity createUser(@RequestBody User user) throws Exception{
 
-        user.setRole("user");
-
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -83,47 +84,14 @@ public class UserRest {
 
         User UserWhitExistingEmail = userRepository.findByEmail(user.getEmail());
 
-        if (UserWhitExistingEmail != null) { // Si != null entra para volver a validar... ?
-            String existingEmail = UserWhitExistingEmail.getEmail();
-            if (!existingEmail.equals(user.getEmail())) { // Creo que esta validación está de más. * ver como esta en municipality
-                userRepository.save(user);
-                return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
-            }else {
-                return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-            }
-        }else { // Si == nulo guardar, una de las 2 esta sobrando
-            userRepository.save(user);
-            return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
-        }
-    }
-
-    @PostMapping(value = "/admin")
-    public ResponseEntity createAdmin(@RequestBody User user) throws Exception{
-        user.setRole("admin");
-
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        for(ConstraintViolation<User> violation2 : violations) {
-            throw new ApiUnproccessableEntityException(violation2.getMessage());
-        }
-
-        User optionalUser = userRepository.findByEmail(user.getEmail());
-
-        if (optionalUser != null) { //mismo caso de antes
-            String mailString = optionalUser.getEmail();
-            if (!mailString.equals(user.getEmail())) {
-                userRepository.save(user);
-                return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
-            }else {
-                return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-            }
+        if (UserWhitExistingEmail != null) {
+            return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }else {
             userRepository.save(user);
             return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
         }
     }
+
 
     @PutMapping
     public ResponseEntity update(@RequestBody User user){

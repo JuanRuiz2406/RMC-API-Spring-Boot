@@ -42,13 +42,15 @@ public class User implements Serializable {
     @Column(length = 100)
     private String direction;
 
-    public User(int id, @NotBlank(message = "La tarjeta de identificacion es obligatoria") String idCard, @NotBlank(message = "El nombre es obligatorio") String name, @NotBlank(message = "El apellido es obligatorio") String lastname, @NotBlank(message = "El correo es obligatorio") @Email(message = "El correo tiene un formato invalido") String email, @NotBlank(message = "La contraseña es obligatoria") String password) {
+    public User(int id, @NotBlank(message = "La tarjeta de identificacion es obligatoria") String idCard, @NotBlank(message = "El nombre es obligatorio") String name, @NotBlank(message = "El apellido es obligatorio") String lastname, @NotBlank(message = "El correo es obligatorio") @Email(message = "El correo tiene un formato invalido") String email, @NotBlank(message = "La contraseña es obligatoria") String password, String role, String direction) {
         this.id = id;
         this.idCard = idCard;
         this.name = name;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.role = role;
+        this.direction = direction;
     }
 
     public User() {

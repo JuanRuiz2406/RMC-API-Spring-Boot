@@ -18,8 +18,10 @@ public class NewUser {
     private String password;
     @NotBlank
     private String idCard;
-
+    @NotBlank
     private String role;
+    @NotBlank
+    private String direction;
 
     public String getName() {
         return name;
@@ -67,5 +69,13 @@ public class NewUser {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
     }
 }
