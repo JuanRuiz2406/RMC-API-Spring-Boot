@@ -13,6 +13,14 @@ public class DetailReport {
     @Column(length = 100)
     private String updateDetail;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Report report;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private DepartamentMunicipality departament;
+
     public int getId() {
         return id;
     }
@@ -21,11 +29,27 @@ public class DetailReport {
         this.id = id;
     }
 
-    public String getUpdate() {
+    public String getUpdateDetail() {
         return updateDetail;
     }
 
-    public void setUpdate(String update) {
-        this.updateDetail = update;
+    public void setUpdateDetail(String updateDetail) {
+        this.updateDetail = updateDetail;
+    }
+
+    public Report getReport() {
+        return report;
+    }
+
+    public DepartamentMunicipality getDepartament() {
+        return departament;
+    }
+
+    public void setDepartament(DepartamentMunicipality departament) {
+        this.departament = departament;
+    }
+
+    public void setReport(Report report) {
+        this.report = report;
     }
 }

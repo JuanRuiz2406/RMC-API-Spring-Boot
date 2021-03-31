@@ -20,17 +20,24 @@ public class DepartamentMunicipality {
     private String description;
 
     @NotBlank(message = "El telefono es obligatorio")
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private String telephone;
 
     @Email(message = "El correo tiene formato incorrecto")
     @NotBlank(message = "El Correo es obligatorio")
-    @Column(length = 100)
+    @Column(length = 100, nullable = false)
     private String email;
 
-    @NotBlank(message = "El horario es obligatorio")
     @Column(length = 100)
     private String schedule;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Municipality municipality;
+
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private User manager;
 
     public int getId() {
         return id;
@@ -78,6 +85,22 @@ public class DepartamentMunicipality {
 
     public void setSchedule(String schedule) {
         this.schedule = schedule;
+    }
+
+    public Municipality getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
     }
 }
 

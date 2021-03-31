@@ -2,6 +2,7 @@ package com.api.ReportsMyCity.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table(name = "report")
@@ -12,19 +13,32 @@ public class Report {
     private int id;
 
     @NotBlank(message = "El titulo es obligatorio")
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     private String title;
 
     @NotBlank(message = "La descripcion es obligatoria")
     @Column(length = 100, nullable = false)
     private String description;
 
-    @Column(length = 45)
+    @NotBlank(message = "El estado es obligatorio")
+    @Column(length = 45, nullable = false)
     private String state;
 
     @NotBlank(message = "La privacidad es obligatoria")
     @Column(length = 45, nullable = false)
     private String privacy;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Coordenates coordenates;
+
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Municipality municipality;
 
     public int getId() {
         return id;
@@ -64,5 +78,29 @@ public class Report {
 
     public void setPrivacy(String privacy) {
         this.privacy = privacy;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Coordenates getCoordenates() {
+        return coordenates;
+    }
+
+    public void setCoordenates(Coordenates coordenates) {
+        this.coordenates = coordenates;
+    }
+
+    public Municipality getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(Municipality municipality) {
+        this.municipality = municipality;
     }
 }
