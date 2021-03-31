@@ -81,6 +81,11 @@
 			<artifactId>hibernate-validator-annotation-processor</artifactId>
 			<version>6.0.2.Final</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.api</groupId>
 			<artifactId>ReportsMyCity</artifactId>
@@ -102,7 +107,10 @@
 			<version>0.9.1</version>
 		</dependency>
 
-
+		<dependency>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+			<version>2.3.4.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>
