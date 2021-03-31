@@ -39,6 +39,7 @@ public class ReportRest {
         this.userRest = userRest;
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<Report>> getAll() {
         List<Report> reports = reportRepository.findAll();
@@ -78,6 +79,7 @@ public class ReportRest {
         return ResponseEntity.ok(reportsByState);
     }
 
+    @CrossOrigin
     @PostMapping(value = "/city/{cityName}")
     public ResponseEntity create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
 

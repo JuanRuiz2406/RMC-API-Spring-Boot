@@ -35,10 +35,6 @@ public class Municipality {
     @Column(length = 100)
     private String webSite;
 
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private Coordenates coordenates;
-
     public int getId() {
         return id;
     }
@@ -93,13 +89,5 @@ public class Municipality {
 
     public void setWebSite(String webSite) {
         this.webSite = webSite;
-    }
-
-    public Coordenates getCoordenates() {
-        return coordenates;
-    }
-
-    public void setCoordenates(Coordenates coordenates) {
-        this.coordenates = coordenates;
     }
 }

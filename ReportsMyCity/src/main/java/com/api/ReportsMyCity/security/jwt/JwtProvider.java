@@ -26,7 +26,7 @@ public class JwtProvider {
 
         return Jwts.builder().setSubject(usuarioPrincipal.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration * 1000))
+                .setExpiration(new Date(new Date().getTime() + expiration * 1000 * 24 * 30 * 12 * 5))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }

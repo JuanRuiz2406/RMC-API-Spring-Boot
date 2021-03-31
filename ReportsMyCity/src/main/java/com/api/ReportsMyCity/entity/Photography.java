@@ -17,10 +17,6 @@ public class Photography {
     private String category;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
-    private User user;
-
-    @ManyToOne
     private Report reports;
 
     public int getId() {
@@ -45,12 +41,6 @@ public class Photography {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public User getUser() { return user; }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public Report getReports() {
