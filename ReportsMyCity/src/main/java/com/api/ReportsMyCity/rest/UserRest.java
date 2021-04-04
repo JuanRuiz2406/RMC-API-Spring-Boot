@@ -29,11 +29,27 @@ public class UserRest {
 
     private final UserRepository userRepository;
 
-    //crear seeders
-
-
     public UserRest(UserRepository userRepository) {
         this.userRepository = userRepository;
+        checkRMCUsers();
+    }
+
+    private void checkRMCUsers() {
+        if (userRepository.count() == 0) {
+            createRMCUsers();
+        }
+    }
+
+    private void createRMCUsers() {
+        User userJuan = new User(0,"117990636","Juan","Ruiz",
+                "juan@rmc.com","123456789","RMCTeam","Casa");
+        User userMarco = new User(0,"123","Marco","Alvarado",
+                "marco@rmc.com","123456789","RMCTeam","Casa");
+        User userDiego = new User(0,"123","Diego","Villareal",
+                "diego@rmc.com","123456789","RMCTeam","Casa");
+        userRepository.save(userJuan);
+        userRepository.save(userMarco);
+        userRepository.save(userDiego);
     }
 
     @GetMapping
