@@ -29,20 +29,20 @@ import javax.validation.Valid;
 @CrossOrigin
 public class AuthController {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final UserRest userRest;
+    private final UserRepository userRepository;
+    private final JwtProvider jwtProvider;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    UserRest userRest;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    JwtProvider jwtProvider;
+    public AuthController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+                          UserRest userRest, UserRepository userRepository, JwtProvider jwtProvider) {
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.userRest = userRest;
+        this.userRepository = userRepository;
+        this.jwtProvider = jwtProvider;
+    }
 
     @PostMapping("/new")
     public ResponseEntity<?> nuevo(@Valid @RequestBody NewUser newUser, BindingResult bindingResult){
