@@ -22,6 +22,10 @@ public class NewUser {
     private String role;
     @NotBlank
     private String direction;
+    @NotBlank
+    private String img_path;
+    @NotBlank
+    private String state;
 
     public String getName() {
         return name;
@@ -77,5 +81,21 @@ public class NewUser {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public String getImg_path() {
+        return img_path;
+    }
+
+    public void setImg_path(String img_path) {
+        this.img_path = img_path;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

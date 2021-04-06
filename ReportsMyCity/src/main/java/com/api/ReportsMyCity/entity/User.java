@@ -36,13 +36,26 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @Column(length = 45)
+    @NotBlank(message = "El rol es obligatorio")
+    @Column(length = 45, nullable = false)
     private String role;
 
-    @Column(length = 100)
+    @NotBlank(message = "La direccion es obligatoria")
+    @Column(length = 100, nullable = false)
     private String direction;
 
-    public User(int id, @NotBlank(message = "La tarjeta de identificacion es obligatoria") String idCard, @NotBlank(message = "El nombre es obligatorio") String name, @NotBlank(message = "El apellido es obligatorio") String lastname, @NotBlank(message = "El correo es obligatorio") @Email(message = "El correo tiene un formato invalido") String email, @NotBlank(message = "La contraseña es obligatoria") String password, String role, String direction) {
+    private String img_path;
+
+    @Column(nullable = false)
+    private boolean state;
+
+    public User(int id, @NotBlank(message = "La tarjeta de identificacion es obligatoria") String idCard,
+                @NotBlank(message = "El nombre es obligatorio") String name,
+                @NotBlank(message = "El apellido es obligatorio") String lastname,
+                @NotBlank(message = "El correo es obligatorio") @Email(message = "El correo tiene un formato invalido") String email,
+                @NotBlank(message = "La contraseña es obligatoria") String password,
+                @NotBlank(message = "El rol es obligatorio") String role,
+                @NotBlank(message = "La direccion es obligatoria")String direction, String img_path, boolean state) {
         this.id = id;
         this.idCard = idCard;
         this.name = name;
@@ -51,6 +64,8 @@ public class User implements Serializable {
         this.password = password;
         this.role = role;
         this.direction = direction;
+        this.img_path = img_path;
+        this.state = state;
     }
 
     public User() {
@@ -119,5 +134,21 @@ public class User implements Serializable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String getImg_path() {
+        return img_path;
+    }
+
+    public void setImg_path(String img_path) {
+        this.img_path = img_path;
+    }
+
+    public boolean isState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        this.state = state;
     }
 }
