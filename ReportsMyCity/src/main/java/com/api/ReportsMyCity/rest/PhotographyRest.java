@@ -41,7 +41,7 @@ public class PhotographyRest {
     }
 
     @PostMapping
-    public void create(Photography photo, @RequestParam("Files") List<MultipartFile> files) throws ResourceNotFoundException, ApiOkException, Exception {
+    public ResponseEntity create(Photography photo, @RequestParam("Files") List<MultipartFile> files) throws ResourceNotFoundException, ApiOkException, Exception {
         boolean flag = true;
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();

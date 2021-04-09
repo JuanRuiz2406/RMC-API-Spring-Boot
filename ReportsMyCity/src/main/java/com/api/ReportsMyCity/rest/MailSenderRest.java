@@ -13,12 +13,12 @@ public class MailSenderRest {
     @Autowired
     private SendingEmailAplication sendingEmailAplication;
 
-    @RequestMapping("/sendEmail")
+    @RequestMapping("/auth/sendEmail")
     public String Send(){
         User user =  new User();
-        user.setName("Marco");
-        user.setLastname("Alvarado");
-        user.setEmail("alvaradomarco2011@gmail.com");
+        user.setName("J");
+        user.setLastname("R");
+        user.setEmail("juan.ruiz.huertas@est.una.ac.cr");
         try {
             sendingEmailAplication.sendNotification(user);
         }catch(MailException e){

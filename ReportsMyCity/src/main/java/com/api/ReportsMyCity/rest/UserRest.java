@@ -24,16 +24,31 @@ import java.util.Set;
 @RequestMapping("user")
 public class UserRest {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    //crear seeders
-
-
-    public UserRest(UserRepository userRepository) {
+    public UserRest(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        checkRMCUsers();
+    }
+
+    private void checkRMCUsers() {
+        if (userRepository.count() == 0) {
+            createRMCUsers();
+        }
+    }
+
+    private void createRMCUsers() {
+        User userJuan = new User(0,"117990636","Juan","Ruiz",
+                "juan@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "", true);
+        User userMarco = new User(0,"123","Marco","Alvarado",
+                "marco@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa","", true);
+        User userDiego = new User(0,"123","Diego","Villareal",
+                "diego@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "", true);
+        userRepository.save(userJuan);
+        userRepository.save(userMarco);
+        userRepository.save(userDiego);
     }
 
     @GetMapping
