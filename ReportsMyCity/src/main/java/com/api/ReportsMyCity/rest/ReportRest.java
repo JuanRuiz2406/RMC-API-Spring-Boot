@@ -123,7 +123,7 @@ public class ReportRest {
                 return new ResponseEntity(new Message("Error al actualizar reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
         }else {
-            return new ResponseEntity(new Message("Este reporte no existe",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al actualizar reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
     }
 
