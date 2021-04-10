@@ -41,11 +41,11 @@ public class UserRest {
 
     private void createRMCUsers() {
         User userJuan = new User(0,"117990636","Juan","Ruiz",
-                "juan@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "", true);
+                "juan@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
         User userMarco = new User(0,"123","Marco","Alvarado",
-                "marco@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa","", true);
+                "marco@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
         User userDiego = new User(0,"123","Diego","Villareal",
-                "diego@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "", true);
+                "diego@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
         userRepository.save(userJuan);
         userRepository.save(userMarco);
         userRepository.save(userDiego);

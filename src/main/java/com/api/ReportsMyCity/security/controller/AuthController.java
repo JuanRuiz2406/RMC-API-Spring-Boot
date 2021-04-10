@@ -51,7 +51,7 @@ public class AuthController {
         if(userRest.getExistsByEmail(newUser.getEmail()))
             return new ResponseEntity(new Message("Ese correo ya existe",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         User user =
-                new User(0,newUser.getIdCard(),newUser.getName(),newUser.getLastName(), newUser.getEmail(), passwordEncoder.encode(newUser.getPassword()), newUser.getRole(), newUser.getDirection(), "", true);
+                new User(0,newUser.getIdCard(),newUser.getName(),newUser.getLastName(), newUser.getEmail(), passwordEncoder.encode(newUser.getPassword()), newUser.getRole(), newUser.getDirection());
         userRepository.save(user);
         return new ResponseEntity(new Message("Usuario guardado", HttpStatus.CREATED.value()), HttpStatus.CREATED);
     }
@@ -65,8 +65,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
-        User user = userRepository.findByEmail(loginUsuario.getEmail());
-        JwtDto jwtDto =  new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities(), user);
+        JwtDto jwtDto =  new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
 
