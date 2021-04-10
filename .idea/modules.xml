@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/spring-api-rmc.iml" filepath="$PROJECT_DIR$/.idea/spring-api-rmc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReportsMyCity.iml" filepath="$PROJECT_DIR$/ReportsMyCity.iml" />
     </modules>
   </component>
 </project>
