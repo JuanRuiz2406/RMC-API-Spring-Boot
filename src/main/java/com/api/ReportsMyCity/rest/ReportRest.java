@@ -106,6 +106,7 @@ public class ReportRest {
 
     }
 
+    @CrossOrigin
     @PutMapping
     public ResponseEntity update(@RequestBody Report reportChanges){
 
