@@ -6,6 +6,7 @@ import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.UserRepository;
 import com.api.ReportsMyCity.security.dto.Message;
+import com.api.ReportsMyCity.security.jwt.JwtProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,9 @@ public class UserRest {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    JwtProvider jwtProvider;
 
     public UserRest(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -84,6 +88,12 @@ public class UserRest {
 
     public boolean getExistsByEmail(String userEmail){
         return userRepository.existsByEmail(userEmail);
+    }
+
+    @PostMapping(value = "/getEmailFromToken/{token}")
+    public String getEmailFromToken(@PathVariable("token") String token){
+        String email = jwtProvider.getEmailFromToken(token);
+        return email;
     }
 
     @PostMapping
