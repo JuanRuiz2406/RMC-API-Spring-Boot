@@ -49,11 +49,8 @@ public class ReportRest {
     @CrossOrigin
     @GetMapping(value = "/byPublicPrivacyAndVisibleState")
     public ResponseEntity<List<Report>> getByPublicPrivacyAndVisibleState() {
-        List<Report> reports = reportRepository.findByPrivacy("Público");
-
-        // State != Rechazado ó Eliminado
-
-        return ResponseEntity.ok(reports);
+        List<Report> reportsToShow = reportRepository.findByStateAndPrivacy("Aceptado", "Público");
+        return ResponseEntity.ok(reportsToShow);
     }
 
     @GetMapping(value = "{reportId}")
@@ -61,12 +58,12 @@ public class ReportRest {
         return this.reportRepository.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
     }
 
-    @GetMapping(value = "/byUserIdCard/{userIdCard}")
-    public ResponseEntity<List<Report>> getByUserIdCard(@PathVariable("userIdCard") String userIdCard) throws Exception {
-        User userFound = userRest.getByIdCard(userIdCard).getBody();
+    @GetMapping(value = "/byUserEmail/{email}")
+    public ResponseEntity<List<Report>> getByUserEmail(@PathVariable("email") String email) throws Exception {
+        User userFound = userRest.getByEmail(email).getBody();
         List<Report> userReports = reportRepository.findByUser(userFound);
         if(userReports.isEmpty()){
-            return new ResponseEntity(new Message("Usuario no cuenta con reportes", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("Este Usuario no ha Realizado Reportes", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(userReports);
     }

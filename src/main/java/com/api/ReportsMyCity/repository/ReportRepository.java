@@ -21,6 +21,6 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     List<Report> findByState(String state);
 
     @Transactional (readOnly = true)
-    List<Report> findByPrivacy(String privacy);
+    List<Report> findByStateAndPrivacy(String state, String privacy);
 
 }
