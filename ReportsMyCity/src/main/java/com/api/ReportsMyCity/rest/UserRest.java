@@ -1,5 +1,7 @@
 package com.api.ReportsMyCity.rest;
 
+import com.api.ReportsMyCity.email.CurrentDate;
+import com.api.ReportsMyCity.email.RandomString;
 import com.api.ReportsMyCity.entity.User;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
@@ -35,6 +37,7 @@ public class UserRest {
         return ResponseEntity.ok(users);
     }
 
+
     @GetMapping(value = "{userId}")
     public User getById(@PathVariable("userId") int userId){
         return this.userRepository.findById(userId).orElseThrow(()->new ResourceNotFoundException("Error, este usuario no existe."));
@@ -63,7 +66,11 @@ public class UserRest {
 
     @PostMapping
     public void createUser(@RequestBody User user) throws ApiOkException, Exception, ApiUnproccessableEntityException{
+        CurrentDate currentDate =  new CurrentDate();
+        RandomString randomString = new RandomString();
 
+        user.setCodeDate(currentDate.getCurrentDate());
+        user.setCode(randomString.nextString());
         user.setRole("user");
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -107,6 +114,7 @@ public class UserRest {
         if (optionalUser != null) { //mismo caso de antes
             String mailString = optionalUser.getEmail();
             if (!mailString.equals(user.getEmail())) {
+
                 userRepository.save(user);
                 throw new ApiOkException("Usuario guardado exitosamente.");
             }else {

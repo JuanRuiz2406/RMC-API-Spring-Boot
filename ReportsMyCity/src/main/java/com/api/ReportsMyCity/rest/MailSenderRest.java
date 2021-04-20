@@ -18,10 +18,7 @@ public class MailSenderRest {
 
     @RequestMapping("/sendEmail")
     public String Send() throws MessagingException {
-
         RandomString random = new RandomString();
-
-
         User user =  new User();
         user.setName("Marco");
         user.setLastname(random.nextString());

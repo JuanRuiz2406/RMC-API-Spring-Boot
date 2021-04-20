@@ -42,6 +42,15 @@ public class User implements Serializable {
     @Column(length = 100)
     private String direction;
 
+    @Column(length = 10)
+    private String code;
+
+    @Column(length = 100)
+    private String codeDate;
+
+    public User() {
+    }
+
     public int getId() {
         return id;
     }
@@ -104,5 +113,20 @@ public class User implements Serializable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getCodeDate() {
+        return codeDate;
+    }
+
+    public void setCodeDate(String codeDate) {
+        this.codeDate = codeDate;
     }
 }
