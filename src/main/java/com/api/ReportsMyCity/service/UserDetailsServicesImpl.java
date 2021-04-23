@@ -19,7 +19,12 @@ public class UserDetailsServicesImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
         try {
             User user = userRest.getByEmail(userEmail).getBody();
-            return UsuarioPrincipal.build(user);
+            String var = user.getState();
+            if(var != null){
+                return UsuarioPrincipal.build(user);
+            }else{
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
