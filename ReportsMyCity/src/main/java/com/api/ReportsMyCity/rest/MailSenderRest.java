@@ -1,6 +1,5 @@
 package com.api.ReportsMyCity.rest;
 
-import com.api.ReportsMyCity.email.RandomString;
 import com.api.ReportsMyCity.email.SendingEmailAplication;
 import com.api.ReportsMyCity.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +14,13 @@ public class MailSenderRest {
     @Autowired
     private SendingEmailAplication sendingEmailAplication;
 
-    @RequestMapping("/sendEmail")
-    public String Send() throws MessagingException {
-        RandomString random = new RandomString();
+    public MailSenderRest() {
 
-        User user = new User();
-        user.setName("Marco");
-        user.setEmail("alvaradomarco2011@gmail.com");
-        user.setCode(random.nextString());
+    }
+
+    @RequestMapping("/sendEmail")
+    public String Send(User user) throws MessagingException {
         sendingEmailAplication.sendNotification(user);
-        System.out.println("ENVIANDO CORREO " + user.getEmail());
         return "enviado";
     }
 

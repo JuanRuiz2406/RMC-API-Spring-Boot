@@ -1,6 +1,7 @@
 package com.api.ReportsMyCity.email;
 
 import com.api.ReportsMyCity.entity.User;
+import com.api.ReportsMyCity.repository.CityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,6 @@ public class SendingEmailAplication {
         String process = templateEngine.process("verificationCode", context);
         javax.mail.internet.MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-        System.out.println("ENVIANDO CORREOass" + user.getEmail());
         helper.setSubject("Código de Seguridad de ReportsMyCity");
         helper.setText(process, true);
         helper.setTo(user.getEmail());

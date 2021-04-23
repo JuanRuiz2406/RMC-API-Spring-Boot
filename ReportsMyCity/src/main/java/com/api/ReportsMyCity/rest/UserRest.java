@@ -25,9 +25,11 @@ import java.util.Set;
 public class UserRest {
 
     private final UserRepository userRepository;
+    private MailSenderRest mailSenderRest;
 
-    public UserRest(UserRepository userRepository) {
+    public UserRest(UserRepository userRepository, MailSenderRest mailSenderRest) {
         this.userRepository = userRepository;
+        this.mailSenderRest = mailSenderRest;
     }
 
     @GetMapping
@@ -196,6 +198,7 @@ public class UserRest {
             user.setCodeDate(currentDate.getCurrentDate());
             user.setCode(randomString.nextString());
             if(userRepository.save(user)!= null){
+                mailSenderRest.Send(user);
                 throw new ApiOkException("Usuario actualizado exitosamente.");
             }else {
                 throw new Exception("Error al actualizar el usuario.");
