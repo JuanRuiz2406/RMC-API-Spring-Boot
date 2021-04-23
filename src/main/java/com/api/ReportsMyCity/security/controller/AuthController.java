@@ -50,8 +50,9 @@ public class AuthController {
             return new ResponseEntity(new Message("Campos mal rellenado binding",HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
         if(userRest.getExistsByEmail(newUser.getEmail()))
             return new ResponseEntity(new Message("Ese correo ya existe",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        newUser.setState("activo");
         User user =
-                new User(0,newUser.getIdCard(),newUser.getName(),newUser.getLastName(), newUser.getEmail(), passwordEncoder.encode(newUser.getPassword()), newUser.getRole(), newUser.getDirection());
+                new User(0,newUser.getIdCard(),newUser.getName(),newUser.getLastName(), newUser.getEmail(), passwordEncoder.encode(newUser.getPassword()), newUser.getRole(), newUser.getDirection(),newUser.getState());
         userRepository.save(user);
         return new ResponseEntity(new Message("Usuario guardado", HttpStatus.CREATED.value()), HttpStatus.CREATED);
     }

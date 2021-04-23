@@ -51,11 +51,11 @@ public class UserRest {
 
     private void createRMCUsers() {
         User userJuan = new User(0,"117990636","Juan","Ruiz",
-                "juan@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
+                "juan@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa","activo");
         User userMarco = new User(0,"123","Marco","Alvarado",
-                "marco@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
+                "marco@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "activo");
         User userDiego = new User(0,"123","Diego","Villareal",
-                "diego@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
+                "diego@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "activo");
         userRepository.save(userJuan);
         userRepository.save(userMarco);
         userRepository.save(userDiego);
@@ -203,10 +203,16 @@ public class UserRest {
         Optional<User> user = userRepository.findById(userId);
 
         if(!user.isPresent()) {
-            return new ResponseEntity(new Message("Error al eliminar usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            User deleteUser = user.get();
+            deleteUser.setState("Eliminado");
+
+            if(userRepository.save(deleteUser) != null){
+                return new ResponseEntity(new Message("Usuario eliminado exitosamente", HttpStatus.OK.value()), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(new Message("Error al eliminar al Usuario", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
         }else {
-            userRepository.deleteById(userId);
-            return new ResponseEntity(new Message("Usuario Eliminado Exitosamente",HttpStatus.OK.value()), HttpStatus.OK);
+            return new ResponseEntity(new Message("Usuario no existe",HttpStatus.OK.value()), HttpStatus.OK);
         }
     }
 
