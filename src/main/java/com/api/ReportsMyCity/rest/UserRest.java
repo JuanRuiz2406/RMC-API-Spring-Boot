@@ -210,22 +210,4 @@ public class UserRest {
         }
     }
 
-    @PutMapping(value = "state/") //???
-    public ResponseEntity deleteUserUpdate(@RequestBody User user) throws Exception{
-
-        Optional<User> optionalUser = userRepository.findById(user.getId());
-        if(optionalUser.isPresent()){
-            User updateUser = optionalUser.get();
-            updateUser.setRole("Inactivo");
-
-            if(userRepository.save(updateUser)!= null){
-                return new ResponseEntity(new Message("Usuario Eliminado Exitosamente",HttpStatus.OK.value()), HttpStatus.OK);
-            }else {
-                return new ResponseEntity(new Message("Error al eliminar usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-            }
-        }else{
-            return new ResponseEntity(new Message("Error al eliminar usuario, usuario no existe",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-        }
-    }
-
 }
