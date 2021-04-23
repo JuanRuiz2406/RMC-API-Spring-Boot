@@ -19,6 +19,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.xml.ws.Response;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -153,9 +154,9 @@ public class UserRest {
         }
 
     }
-
+    @CrossOrigin
     @GetMapping(value = "/verificationCode/{email}/{code}")
-    public void checkVerificationCode(@PathVariable String email,@PathVariable String code) throws ApiOkException, ResourceNotFoundException, Exception{
+    public ResponseEntity checkVerificationCode(@PathVariable String email, @PathVariable String code) throws ApiOkException, ResourceNotFoundException, Exception{
         User user = userRepository.findByEmail(email);
         if (user != null) {
             if (user.getCode().equals(code)){
@@ -166,20 +167,21 @@ public class UserRest {
                 int milisecondsByDay = 86400000;
                 int dias = (int) ((localCurrentDate.getTime()-codeDate.getTime()) / milisecondsByDay);
                 if(dias == 0){
-                    throw new ResourceNotFoundException("Codigo Valido!");
+                    return new ResponseEntity(new Message("Código Válido",HttpStatus.CREATED.value()), HttpStatus.CREATED);
                 }else {
-                    throw new ResourceNotFoundException("Error, El código ha expirado.");
+                    return new ResponseEntity(new Message("El código ha expirado",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
                 }
             }else{
-                throw new ResourceNotFoundException("Error, Los códigos no coinciden.");
+                return new ResponseEntity(new Message("El código es incorrecto",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
         }else {
-            throw new ResourceNotFoundException("Error, No existe un usuario con este correo.");
+            return new ResponseEntity(new Message("No existe un usuario con este correo",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
     }
 
+    @CrossOrigin
     @PutMapping(value = "/verificationCode/{email}")
-    public void updateVerificationCode(@PathVariable("email") String email) throws ApiOkException, ResourceNotFoundException, Exception{
+    public ResponseEntity updateVerificationCode(@PathVariable("email") String email) throws ApiOkException, ResourceNotFoundException, Exception{
         User user = userRepository.findByEmail(email);
         if (user != null) {
             CurrentDate currentDate =  new CurrentDate();
@@ -188,12 +190,14 @@ public class UserRest {
             user.setCode(randomString.nextString());
             if(userRepository.save(user)!= null){
                 mailSenderRest.Send(user);
-                throw new ApiOkException("Código Enviado.");
+                return new ResponseEntity(new Message("Código Enviado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
+
             }else {
-                throw new Exception("Error al actualizar el usuario.");
+                return new ResponseEntity(new Message("Error aL enviar el código",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
         }else {
-            throw new ResourceNotFoundException("Error, No existe un usuario con este correo.");
+            return new ResponseEntity(new Message("No existe el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+
         }
     }
 
