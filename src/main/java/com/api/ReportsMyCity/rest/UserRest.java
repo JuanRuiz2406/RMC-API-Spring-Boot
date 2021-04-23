@@ -197,14 +197,14 @@ public class UserRest {
         }
     }
 
-    @DeleteMapping(value = "{userId}") // users/userId {DELETE}
-    public ResponseEntity delete(@PathVariable("userId") int userId){
+    @DeleteMapping(value = "{userEmail}") // users/userId {DELETE}
+    public ResponseEntity delete(@PathVariable("userEmail") String userEmail){
 
-        Optional<User> user = userRepository.findById(userId);
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(userEmail));
 
-        if(!user.isPresent()) {
+        if(user.isPresent()) {
             User deleteUser = user.get();
-            deleteUser.setState("Eliminado");
+            deleteUser.setState(null);
 
             if(userRepository.save(deleteUser) != null){
                 return new ResponseEntity(new Message("Usuario eliminado exitosamente", HttpStatus.OK.value()), HttpStatus.OK);
@@ -212,7 +212,7 @@ public class UserRest {
                 return new ResponseEntity(new Message("Error al eliminar al Usuario", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
         }else {
-            return new ResponseEntity(new Message("Usuario no existe",HttpStatus.OK.value()), HttpStatus.OK);
+            return new ResponseEntity(new Message("Usuario no existe",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
     }
 

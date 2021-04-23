@@ -6,10 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="79cef5a5-580f-4b94-805b-e7623cedf2ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/UserRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/UserRest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/security/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/security/dto/NewUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/security/dto/NewUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/service/UserDetailsServicesImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/service/UserDetailsServicesImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +78,7 @@
       <workItem from="1618643008140" duration="606000" />
       <workItem from="1618891268174" duration="28000" />
       <workItem from="1618947803519" duration="2299000" />
-      <workItem from="1619148273593" duration="2977000" />
+      <workItem from="1619148273593" duration="6961000" />
     </task>
     <servers />
   </component>
