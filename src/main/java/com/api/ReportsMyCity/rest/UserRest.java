@@ -27,13 +27,15 @@ public class UserRest {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private MailSenderRest mailSenderRest;
 
     @Autowired
     JwtProvider jwtProvider;
 
-    public UserRest(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserRest(UserRepository userRepository, PasswordEncoder passwordEncoder, MailSenderRest mailSenderRest) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailSenderRest = mailSenderRest;
         checkRMCUsers();
     }
 
@@ -99,6 +101,12 @@ public class UserRest {
     @PostMapping
     public ResponseEntity createUser(@RequestBody User user) throws Exception{
 
+        CurrentDate currentDate =  new CurrentDate();
+        RandomString randomString = new RandomString();
+
+        user.setCodeDate(currentDate.getCurrentDate());
+        user.setCode(randomString.nextString());
+
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
@@ -140,6 +148,49 @@ public class UserRest {
             return new ResponseEntity(new Message("Usuario No existe",HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
 
+    }
+
+    @GetMapping(value = "/checkVerificationCode/{email}/{code}")
+    public void checkVerificationCode(@PathVariable String email,@PathVariable String code) throws ApiOkException, ResourceNotFoundException, Exception{
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            if (user.getCode().equals(code)){
+                SimpleDateFormat date = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                CurrentDate currentDate =  new CurrentDate();
+                Date localCurrentDate = date.parse(currentDate.getCurrentDate());
+                Date codeDate = date.parse(user.getCodeDate());
+                int milisecondsByDay = 86400000;
+                int dias = (int) ((localCurrentDate.getTime()-codeDate.getTime()) / milisecondsByDay);
+                if(dias == 0){
+                    throw new ResourceNotFoundException("Codigo Valido!");
+                }else {
+                    throw new ResourceNotFoundException("Error, El código ha expirado.");
+                }
+            }else{
+                throw new ResourceNotFoundException("Error, Los códigos no coinciden.");
+            }
+        }else {
+            throw new ResourceNotFoundException("Error, No existe un usuario con este correo.");
+        }
+    }
+
+    @PutMapping(value = "/updateVerificationCode/{email}")
+    public void updateVerificationCode(@PathVariable("email") String email) throws ApiOkException, ResourceNotFoundException, Exception{
+        User user = userRepository.findByEmail(email);
+        if (user != null) {
+            CurrentDate currentDate =  new CurrentDate();
+            RandomString randomString = new RandomString();
+            user.setCodeDate(currentDate.getCurrentDate());
+            user.setCode(randomString.nextString());
+            if(userRepository.save(user)!= null){
+                mailSenderRest.Send(user);
+                throw new ApiOkException("Usuario actualizado exitosamente.");
+            }else {
+                throw new Exception("Error al actualizar el usuario.");
+            }
+        }else {
+            throw new ResourceNotFoundException("Error, No existe un usuario con este correo.");
+        }
     }
 
     @DeleteMapping(value = "{userId}") // users/userId {DELETE}
