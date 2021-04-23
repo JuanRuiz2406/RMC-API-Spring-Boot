@@ -22,7 +22,6 @@ public class NewUser {
     private String role;
     @NotBlank
     private String direction;
-    private String state;
 
     public String getName() {
         return name;
@@ -78,13 +77,5 @@ public class NewUser {
 
     public void setDirection(String direction) {
         this.direction = direction;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 }
