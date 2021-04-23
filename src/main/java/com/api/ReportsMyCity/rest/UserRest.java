@@ -1,5 +1,7 @@
 package com.api.ReportsMyCity.rest;
 
+import com.api.ReportsMyCity.email.CurrentDate;
+import com.api.ReportsMyCity.email.RandomString;
 import com.api.ReportsMyCity.entity.User;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
@@ -17,6 +19,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -150,7 +154,7 @@ public class UserRest {
 
     }
 
-    @GetMapping(value = "/checkVerificationCode/{email}/{code}")
+    @GetMapping(value = "/verificationCode/{email}/{code}")
     public void checkVerificationCode(@PathVariable String email,@PathVariable String code) throws ApiOkException, ResourceNotFoundException, Exception{
         User user = userRepository.findByEmail(email);
         if (user != null) {
@@ -174,7 +178,7 @@ public class UserRest {
         }
     }
 
-    @PutMapping(value = "/updateVerificationCode/{email}")
+    @PutMapping(value = "/verificationCode/{email}")
     public void updateVerificationCode(@PathVariable("email") String email) throws ApiOkException, ResourceNotFoundException, Exception{
         User user = userRepository.findByEmail(email);
         if (user != null) {
@@ -184,7 +188,7 @@ public class UserRest {
             user.setCode(randomString.nextString());
             if(userRepository.save(user)!= null){
                 mailSenderRest.Send(user);
-                throw new ApiOkException("Usuario actualizado exitosamente.");
+                throw new ApiOkException("Código Enviado.");
             }else {
                 throw new Exception("Error al actualizar el usuario.");
             }
