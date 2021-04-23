@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Email</title>
+</head>
+<body>
+<tbody><tr>
+    <td align="center" style="border-collapse:separate;table-layout:fixed">
+        <table border="0" align="center" cellpadding="0" cellspacing="0" class="m_-9083664310018876168wrapper" width="600" style="width:600px;table-layout:fixed;border-collapse:separate;min-width:600px">
+            <tbody><tr>
+                <td align="center" bgcolor="#E7E6E3" class="m_-9083664310018876168pad1" style="border-collapse:separate;table-layout:fixed;padding-top:30px">
+
+
+                    <table class="m_-9083664310018876168maintable" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;border-collapse:separate;width:90%">
+                        <tbody>
+                        <tr>
+
+                            <td align="left" class="m_-9083664310018876168h2" style="padding-bottom:20px;border-collapse:separate;table-layout:fixed;font-family:Avenir,sans-serif;font-size:31px;line-height:32px;color:#1a1a18;text-decoration:none;font-weight:normal">
+                                Hola, <b th:text="${user.getName()}"></b>:<br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" class="m_-9083664310018876168body" style="padding-bottom:20px;border-collapse:separate;table-layout:fixed;font-family:Avenir,sans-serif;font-size:13px;line-height:20px;color:#454545">
+                                Hemos recibido una solicitud de código de verificación para tu cuenta de ReportsMyCity.
+                                Para completar tu solicitud, introduce el siguiente código de verificación en el campo de seguridad:<br>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                    <table class="m_-9083664310018876168maintable" align="center" border="0" cellspacing="0" cellpadding="0">
+                        <tbody><tr>
+                            <td class="m_-9083664310018876168maintable" valign="middle" align="center" style="background-color:#d9d8d4;font-family:Avenir,sans-serif;font-size:16px;color:#454545;text-decoration:none;font-weight:normal;line-height:20px;padding:20px 0px">
+                                <br>
+                                <div>
+                                    <strong><b th:text="${user.getCode()}"></b></strong><br><br>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody></table>
+                    <table class="m_-9083664310018876168maintable" border="0" cellspacing="0" cellpadding="0" style="table-layout:fixed;border-collapse:separate;width:90%">
+                        <tbody><tr>
+                            <td align="left" class="m_-9083664310018876168body" style="padding:20px 0px 40px 0px;border-collapse:separate;table-layout:fixed;font-family:Avenir,sans-serif;font-size:13px;line-height:20px;color:#454545">
+                                Si tú no hiciste esta solicitud, cambia la <span class="il">contraseña</span> de tu cuenta de inmediato para evitar más accesos no autorizados.<br><br>
+                                <b>Aquí para ayudarte,</b><br>
+                                El equipo de ReportsMyCity<br><br>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+</body>
+</html>

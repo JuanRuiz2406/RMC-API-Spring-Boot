@@ -42,6 +42,11 @@ public class User implements Serializable {
     @Column(length = 100)
     private String direction;
 
+    @Column(length = 10)
+    private String code;
+
+    @Column(length = 100)
+    private String codeDate;
     public User(int id, @NotBlank(message = "La tarjeta de identificacion es obligatoria") String idCard, @NotBlank(message = "El nombre es obligatorio") String name, @NotBlank(message = "El apellido es obligatorio") String lastname, @NotBlank(message = "El correo es obligatorio") @Email(message = "El correo tiene un formato invalido") String email, @NotBlank(message = "La contraseña es obligatoria") String password, String role, String direction) {
         this.id = id;
         this.idCard = idCard;
@@ -55,6 +60,7 @@ public class User implements Serializable {
 
     public User() {
 
+    public User() {
     }
 
     public int getId() {
@@ -119,5 +125,20 @@ public class User implements Serializable {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getCodeDate() {
+        return codeDate;
+    }
+
+    public void setCodeDate(String codeDate) {
+        this.codeDate = codeDate;
     }
 }
