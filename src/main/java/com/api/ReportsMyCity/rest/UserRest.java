@@ -52,11 +52,11 @@ public class UserRest {
 
     private void createRMCUsers() {
         User userJuan = new User(0,"117990636","Juan","Ruiz",
-                "juan@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
+                "juan@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "activo");
         User userMarco = new User(0,"123","Marco","Alvarado",
-                "marco@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
+                "marco@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "activo");
         User userDiego = new User(0,"123","Diego","Villareal",
-                "diego@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa");
+                "diego@rmc.com",passwordEncoder.encode("123456789"),"RMCTeam","Casa", "activo");
         userRepository.save(userJuan);
         userRepository.save(userMarco);
         userRepository.save(userDiego);
@@ -214,13 +214,13 @@ public class UserRest {
         }
     }
 
-    @PutMapping(value = "state/") //???
-    public ResponseEntity deleteUserUpdate(@RequestBody User user) throws Exception{
+    @PutMapping(value = "state/{userEmail}") //???
+    public ResponseEntity deleteUserUpdate(@PathVariable("userEmail") String userEmail) throws Exception{
 
-        Optional<User> optionalUser = userRepository.findById(user.getId());
-        if(optionalUser.isPresent()){
-            User updateUser = optionalUser.get();
-            updateUser.setRole("Inactivo");
+        User user = userRepository.findByEmail(userEmail);
+        if(user != null){
+            User updateUser = user;
+            updateUser.setState("Inactivo");
 
             if(userRepository.save(updateUser)!= null){
                 return new ResponseEntity(new Message("Usuario Eliminado Exitosamente",HttpStatus.OK.value()), HttpStatus.OK);

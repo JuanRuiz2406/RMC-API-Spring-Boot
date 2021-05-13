@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="79cef5a5-580f-4b94-805b-e7623cedf2ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/ReportRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/ReportRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/ReportRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/ReportRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/UserRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/UserRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,6 +37,17 @@
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ReportsMyCityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="ReportsMyCity" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.api.ReportsMyCity.ReportsMyCityApplication" />
@@ -66,6 +78,16 @@
       <workItem from="1618643008140" duration="606000" />
       <workItem from="1618891268174" duration="28000" />
       <workItem from="1618947803519" duration="2299000" />
+      <workItem from="1619397688661" duration="5535000" />
+      <workItem from="1619414654971" duration="3000" />
+      <workItem from="1619495296198" duration="605000" />
+      <workItem from="1619738219365" duration="1192000" />
+      <workItem from="1619820213879" duration="46000" />
+      <workItem from="1620179931844" duration="9000" />
+      <workItem from="1620335277397" duration="1825000" />
+      <workItem from="1620602203940" duration="2412000" />
+      <workItem from="1620667921085" duration="3489000" />
+      <workItem from="1620920799932" duration="2332000" />
     </task>
     <servers />
   </component>
