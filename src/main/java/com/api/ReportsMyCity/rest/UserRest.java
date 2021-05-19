@@ -130,6 +130,32 @@ public class UserRest {
         }
     }
 
+    public ResponseEntity<User> createMunicipalityManager(@RequestBody User user) throws Exception{
+
+        CurrentDate currentDate =  new CurrentDate();
+        RandomString randomString = new RandomString();
+
+        user.setCodeDate(currentDate.getCurrentDate());
+        user.setCode(randomString.nextString());
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        for(ConstraintViolation<User> violation : violations) {
+            throw new ApiUnproccessableEntityException(violation.getMessage());
+        }
+
+        User UserWhitExistingEmail = userRepository.findByEmail(user.getEmail());
+
+        if (UserWhitExistingEmail != null) {
+            return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        }else {
+            User savedManager = userRepository.save(user);
+            return ResponseEntity.ok(savedManager);
+        }
+    }
+
 
     @PutMapping
     public ResponseEntity update(@RequestBody User user){

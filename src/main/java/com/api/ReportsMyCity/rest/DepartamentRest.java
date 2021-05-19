@@ -58,7 +58,7 @@ public class DepartamentRest {
             updateDepartament.setDescription(departamentChanges.getDescription());
             updateDepartament.setEmail(departamentChanges.getEmail());
             updateDepartament.setName(departamentChanges.getName());
-            updateDepartament.setSchedule(departamentChanges.getSchedule());
+            updateDepartament.setState(departamentChanges.getState());
             updateDepartament.setTelephone(departamentChanges.getTelephone());
 
             departamentRepository.save(updateDepartament);

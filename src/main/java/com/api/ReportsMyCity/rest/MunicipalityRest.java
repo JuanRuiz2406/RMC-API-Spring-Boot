@@ -1,6 +1,7 @@
 package com.api.ReportsMyCity.rest;
 
 import com.api.ReportsMyCity.entity.Municipality;
+import com.api.ReportsMyCity.entity.User;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
@@ -23,11 +24,14 @@ import java.util.Set;
 public class MunicipalityRest {
 
     private final MunicipalityRepository municipalityRepository;
+    private UserRest userRest;
 
-    public MunicipalityRest(MunicipalityRepository municipalityRepository) {
+    public MunicipalityRest(MunicipalityRepository municipalityRepository, UserRest userRest) {
         this.municipalityRepository = municipalityRepository;
+        this.userRest = userRest;
     }
 
+    @CrossOrigin
     @GetMapping
     public ResponseEntity<List<Municipality>> getAll() throws ResourceNotFoundException {
         List<Municipality> municipalities = municipalityRepository.findAll();
@@ -39,8 +43,13 @@ public class MunicipalityRest {
         return this.municipalityRepository.findById(municipalityId).orElseThrow(()->new ResourceNotFoundException("Error, la municipalidad no existe."));
     }
 
+    @CrossOrigin
     @PostMapping
-    public ResponseEntity create(@RequestBody Municipality municipality){
+    public ResponseEntity create(@RequestBody Municipality municipality) throws Exception {
+
+        User newManager = municipality.getManager();
+        User savedManager = userRest.createMunicipalityManager(newManager).getBody();
+        municipality.setManager(savedManager);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -77,9 +86,10 @@ public class MunicipalityRest {
                     updateMunicipality.setName(municipalityChanges.getName());
                     updateMunicipality.setEmail(municipalityChanges.getEmail());
                     updateMunicipality.setAdress(municipalityChanges.getAdress());
-                    updateMunicipality.setSchedule(municipalityChanges.getSchedule());
+                    updateMunicipality.setState(municipalityChanges.getState());
                     updateMunicipality.setTelephone(municipalityChanges.getTelephone());
                     updateMunicipality.setWebSite(municipalityChanges.getWebSite());
+                    updateMunicipality.setManager(municipalityChanges.getManager());
 
                     if(municipalityRepository.save(updateMunicipality) != null) {
                         return new ResponseEntity(new Message("Municipalidad actualizada correctamente",HttpStatus.OK.value()), HttpStatus.OK);
