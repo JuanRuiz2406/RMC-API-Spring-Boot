@@ -70,5 +70,41 @@ public class AuthController {
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
 
+    @PostMapping("/loginWithAPI")
+    public JwtDto loginWithAPI(LoginUsuario loginUsuario){
+        Authentication authentication =
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getEmail(), loginUsuario.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtProvider.generateToken(authentication);
+        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        User user = userRepository.findByEmail(userDetails.getUsername());
+        JwtDto jwtDto =  new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities(), user);
+        return jwtDto;
+    }
+
+    /*@PostMapping("/loginWithGoogle")
+    public JwtDto loginWithGoogle(LoginUsuario loginUsuario){
+        User user = userRepository.findByEmail(loginUsuario.getEmail());//busco al usuario
+        if(user != null){
+
+        }
+    }*/
+
+    @PostMapping("/loginproviders")
+    public ResponseEntity<?> loginProviders(@Valid @RequestBody LoginUsuario loginUsuario){
+        if(loginUsuario == null){
+            return new ResponseEntity(new Message("Campos mal rellenados", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        }
+        if(loginUsuario.getProvider() == "google"){
+
+        }
+        else if(loginUsuario.getProvider() == "facebook"){
+
+        }
+
+        JwtDto jwt = loginWithAPI(loginUsuario);
+        return new ResponseEntity(jwt, HttpStatus.OK);
+    }
+
     //añadir la parte de olvide mi contraseña.
 }

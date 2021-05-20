@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.xml.bind.DatatypeConverter;
 import java.util.Date;
 
 
@@ -20,6 +21,7 @@ public class JwtProvider {
 
     @Value("3600")
     private int expiration;
+
 
     public String generateToken(Authentication authentication){
         UsuarioPrincipal usuarioPrincipal = (UsuarioPrincipal) authentication.getPrincipal();
@@ -37,6 +39,7 @@ public class JwtProvider {
 
 
     public boolean validateToken(String token){
+
         try{
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
@@ -50,6 +53,7 @@ public class JwtProvider {
             logger.error("token expirado");
         }
         catch (IllegalArgumentException e){
+            logger.error(e.getMessage());
             logger.error("token vacio");
         }
         catch (SignatureException e){

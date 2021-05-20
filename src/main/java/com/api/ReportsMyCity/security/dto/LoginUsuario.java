@@ -11,6 +11,8 @@ public class LoginUsuario {
     @NotBlank
     private String password;
 
+    private String provider;
+
     public String getEmail() {
         return email;
     }
@@ -25,5 +27,13 @@ public class LoginUsuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }

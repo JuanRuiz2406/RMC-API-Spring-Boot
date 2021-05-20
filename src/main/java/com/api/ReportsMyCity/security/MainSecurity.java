@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -29,6 +30,9 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     JwtEntryPoint jwtEntryPoint;
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @Bean
     public JwtTokenFilter jwtTokenFilter(){
         return new JwtTokenFilter();
@@ -41,6 +45,7 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //auth.parentAuthenticationManager(authenticationManager).userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
