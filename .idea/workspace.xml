@@ -6,7 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="79cef5a5-580f-4b94-805b-e7623cedf2ef" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/security/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/security/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/DepartamentMunicipality.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/DepartamentMunicipality.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/Municipality.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/entity/Municipality.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,13 +37,15 @@
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -86,6 +90,8 @@
       <workItem from="1620602203940" duration="2412000" />
       <workItem from="1620667921085" duration="3489000" />
       <workItem from="1620920799932" duration="5023000" />
+      <workItem from="1621383686645" duration="7744000" />
+      <workItem from="1621459289346" duration="1441000" />
     </task>
     <servers />
   </component>

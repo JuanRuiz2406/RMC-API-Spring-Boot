@@ -29,8 +29,7 @@ public class Municipality {
     @Column(length = 10, nullable = false)
     private String telephone;
 
-    @Column(length = 45)
-    @JoinColumn(nullable = false)
+    @Column(length = 45, nullable = false)
     private String state;
 
     @Column(length = 100)

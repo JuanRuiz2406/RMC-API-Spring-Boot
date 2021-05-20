@@ -28,8 +28,7 @@ public class DepartamentMunicipality {
     @Column(length = 100, nullable = false)
     private String email;
 
-    @Column(length = 100)
-    @JoinColumn(nullable = false)
+    @Column(length = 100, nullable = false)
     private String state;
 
     @ManyToOne
