@@ -55,13 +55,14 @@ public class FirebaseImageService implements IImageService {
 
     @Override
     public String save(MultipartFile file) throws IOException {
+        System.out.println("save");
 
         Bucket bucket = StorageClient.getInstance().bucket();
-
+        System.out.println("after bucket");
         String name = generateFileName(file.getOriginalFilename());
 
         bucket.create(name, file.getBytes(), file.getContentType());
-
+        System.out.println("after bucket");
         return name;
     }
 

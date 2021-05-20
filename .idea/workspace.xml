@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="79cef5a5-580f-4b94-805b-e7623cedf2ef" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/img/FirebaseImageService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/img/IImageService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/firebase.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uploads/2 manos ayudadoras.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uploads/4.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uploads/6.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/PhotographyRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/PhotographyRest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/img/FirebaseImageService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/img/FirebaseImageService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/firebase.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/firebase.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +110,7 @@
       <workItem from="1620602203940" duration="2412000" />
       <workItem from="1620667921085" duration="3489000" />
       <workItem from="1620920799932" duration="5023000" />
-      <workItem from="1621460996287" duration="8400000" />
+      <workItem from="1621460996287" duration="14704000" />
     </task>
     <servers />
   </component>
