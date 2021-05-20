@@ -137,7 +137,7 @@ public class UserRest {
 
         user.setCodeDate(currentDate.getCurrentDate());
         user.setCode(randomString.nextString());
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
