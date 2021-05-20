@@ -8,7 +8,10 @@ import com.api.ReportsMyCity.security.dto.LoginUsuario;
 import com.api.ReportsMyCity.security.dto.Message;
 import com.api.ReportsMyCity.security.dto.NewUser;
 import com.api.ReportsMyCity.security.jwt.JwtProvider;
+import com.api.ReportsMyCity.security.jwt.JwtTokenFilter;
 import com.api.ReportsMyCity.service.UserDetailsServicesImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +32,8 @@ import javax.validation.Valid;
 @RequestMapping("/auth")
 @CrossOrigin
 public class AuthController {
+
+    private final static Logger logger = LoggerFactory.getLogger(JwtTokenFilter.class);
 
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -82,27 +88,37 @@ public class AuthController {
         return jwtDto;
     }
 
-    /*@PostMapping("/loginWithGoogle")
-    public JwtDto loginWithGoogle(LoginUsuario loginUsuario){
-        User user = userRepository.findByEmail(loginUsuario.getEmail());//busco al usuario
+    @PostMapping("/loginWithGoogle")
+    public JwtDto loginWithThird(LoginUsuario loginUsuario){
+        ResponseEntity<User> user = userRest.getByEmail(loginUsuario.getEmail());//busco al usuario
+        System.out.println(user.getBody().getEmail());
         if(user != null){
-
+            loginUsuario.setPassword(user.getBody().getPassword());
+            return loginWithAPI(loginUsuario);
         }
-    }*/
+        User userTemp = new User(0,"123456789",loginUsuario.getName(),loginUsuario.getLastname(), loginUsuario.getEmail(), passwordEncoder.encode("12345678"), "user", "direccion", "activo");
+        userRepository.save(userTemp);
+        loginUsuario.setPassword(userTemp.getPassword());
+        return new JwtDto("","",null,userTemp);
+
+    }
 
     @PostMapping("/loginproviders")
     public ResponseEntity<?> loginProviders(@Valid @RequestBody LoginUsuario loginUsuario){
+        JwtDto jwt;
         if(loginUsuario == null){
             return new ResponseEntity(new Message("Campos mal rellenados", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
-        if(loginUsuario.getProvider() == "google"){
+        if(loginUsuario.getProvider() == "google" || loginUsuario.getProvider() == "facebook"){
+            jwt = loginWithThird(loginUsuario);
+            if(jwt.getToken() != ""){
+                return new ResponseEntity(jwt, HttpStatus.OK);
+            }
+            return new ResponseEntity(new Message("Usuario no registrado, completo los siguiente campos", HttpStatus.CONTINUE.value()),HttpStatus.CONTINUE);
 
         }
-        else if(loginUsuario.getProvider() == "facebook"){
 
-        }
-
-        JwtDto jwt = loginWithAPI(loginUsuario);
+        jwt = loginWithAPI(loginUsuario);
         return new ResponseEntity(jwt, HttpStatus.OK);
     }
 
