@@ -69,6 +69,7 @@ public class AuthController {
         String jwt = jwtProvider.generateToken(authentication);
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         User user = userRepository.findByEmail(userDetails.getUsername());
+        user.setPassdecode("secreto");
         JwtDto jwtDto =  new JwtDto(jwt, userDetails.getUsername(), userDetails.getAuthorities(), user);
         return new ResponseEntity(jwtDto, HttpStatus.OK);
     }
