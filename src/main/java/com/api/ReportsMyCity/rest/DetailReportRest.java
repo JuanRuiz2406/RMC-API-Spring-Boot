@@ -45,6 +45,7 @@ public class DetailReportRest {
 
     }
 
+    @CrossOrigin
     @GetMapping(value = "/byReport/{reportId}")
     public ResponseEntity<List<DetailReport>> getByReportId(@PathVariable("reportId") int reportId){
 
