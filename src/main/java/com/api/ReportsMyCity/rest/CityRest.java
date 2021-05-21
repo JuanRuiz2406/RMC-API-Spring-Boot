@@ -58,7 +58,6 @@ public class CityRest {
         return ResponseEntity.ok(citiesMunicipality);
     }
 
-
     @CrossOrigin
     @PostMapping
     public ResponseEntity create(@RequestBody City city) throws ResourceNotFoundException, ApiOkException, Exception{

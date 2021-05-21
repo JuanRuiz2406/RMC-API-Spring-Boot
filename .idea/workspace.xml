@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="bd8f1dd5-b466-4945-a952-aa883a96037c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/CityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/CityRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/DepartamentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/DepartamentRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/CityRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/CityRest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/DepartamentRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/DepartamentRest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/UserRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/UserRest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
@@ -35,6 +36,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager">

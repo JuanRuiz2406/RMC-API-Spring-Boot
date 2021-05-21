@@ -103,6 +103,7 @@ public class UserRest {
         return email;
     }
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity createUser(@RequestBody User user) throws Exception{
 
@@ -111,6 +112,7 @@ public class UserRest {
 
         user.setCodeDate(currentDate.getCurrentDate());
         user.setCode(randomString.nextString());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
@@ -155,7 +157,6 @@ public class UserRest {
             return ResponseEntity.ok(savedManager);
         }
     }
-
 
     @PutMapping
     public ResponseEntity update(@RequestBody User user){
