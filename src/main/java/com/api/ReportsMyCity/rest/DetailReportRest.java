@@ -5,6 +5,8 @@ import com.api.ReportsMyCity.entity.Report;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
 import com.api.ReportsMyCity.repository.DetailReportRepository;
 import com.api.ReportsMyCity.repository.ReportRepository;
+import com.api.ReportsMyCity.security.dto.Message;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,11 +56,12 @@ public class DetailReportRest {
         return ResponseEntity.ok(detailsByReport);
     }
 
-    @PostMapping // No tiene msjs ni validaciones
-    public ResponseEntity<DetailReport> create(@RequestBody DetailReport detailReport){
+    @CrossOrigin
+    @PostMapping
+    public ResponseEntity create(@RequestBody DetailReport detailReport){
 
         DetailReport newDetail = detailReportRepository.save(detailReport);
-        return ResponseEntity.ok(newDetail);
+        return new ResponseEntity(new Message("Detalle guardado exitosamente", HttpStatus.OK.value()), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "{detailReportId}") // No tiene msjs ni validaciones

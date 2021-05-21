@@ -64,6 +64,16 @@ public class DepartamentRest {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/byUser/{userId}")
+    public ResponseEntity<List<DepartamentMunicipality>> getByUserId(@PathVariable("userId")int userId){
+        User userFound = userRest.getById(userId);
+
+        List<DepartamentMunicipality> departament = departamentRepository.findByManager(userFound);
+
+        return ResponseEntity.ok(departament);
+    }
+
+    @CrossOrigin
     @PostMapping
     public ResponseEntity create(@RequestBody DepartamentMunicipality departament) throws Exception {
 
