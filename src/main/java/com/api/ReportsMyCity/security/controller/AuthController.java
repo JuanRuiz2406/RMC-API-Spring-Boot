@@ -62,9 +62,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUsuario loginUsuario, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message("Campos mal puestos", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUsuario loginUsuario){
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getEmail(), loginUsuario.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -76,7 +74,7 @@ public class AuthController {
     }
 
     @PostMapping("/loginWithAPI")
-    public JwtDto loginWithAPI(NewUser loginUsuario){
+    public JwtDto loginWithAPI(LoginUsuario loginUsuario){
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getEmail(), loginUsuario.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -88,29 +86,37 @@ public class AuthController {
     }
 
     @PostMapping("/loginWithGoogle")
-    public JwtDto loginWithThird(NewUser loginUsuario){
-        ResponseEntity<User> user = userRest.getByEmail(loginUsuario.getEmail());//busco al usuario
-        System.out.println(user.getBody().getEmail());
-        if(user != null){
-            String password = user.getBody().getPassdecode();
-            loginUsuario.setPassword(password);
-            return loginWithAPI(loginUsuario);
-        }
-        User userTemp = new User(0,"123456789",loginUsuario.getName(),loginUsuario.getLastName(), loginUsuario.getEmail(), passwordEncoder.encode("12345678"),"123456789", "user", "direccion", "activo");
-        userRepository.save(userTemp);
-        loginUsuario.setPassword(userTemp.getPassword());
-        return new JwtDto("","",null,userTemp);
+    public ResponseEntity<?> loginWithThird(@Valid @RequestBody NewUser newUser, BindingResult bindingResult){
 
+        if(bindingResult.hasErrors())
+            return new ResponseEntity(new Message("Campos mal rellenado binding",HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+
+        if (!userRest.getExistsByEmail(newUser.getEmail())){
+            //User userTemp = new User(0,"123456789",newUser.getName(),newUser.getLastName(), newUser.getEmail(), passwordEncoder.encode("12345678"),"123456789", "user", "direccion", "activo");
+            //userRepository.save(userTemp);
+            ResponseEntity res = nuevo(newUser, bindingResult);
+            if(res.getStatusCode().value() != 201){
+                return new ResponseEntity(new Message("Error al crear usuario", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+        }
+        ResponseEntity<User> user = userRest.getByEmail(newUser.getEmail());//busco al usuario
+        if(user != null){
+            LoginUsuario loginUsuario = new LoginUsuario();
+            loginUsuario.setEmail(user.getBody().getEmail());
+            loginUsuario.setPassword(user.getBody().getPassdecode());
+            loginUsuario.setProvider(newUser.getProvider());
+            loginUsuario.setName(user.getBody().getName());
+            loginUsuario.setLastname(user.getBody().getLastname());
+            return login(loginUsuario);
+        }
+        return new ResponseEntity(new Message("Error en el servidor", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/loginproviders")
+    /*@PostMapping("/loginproviders")
     public ResponseEntity<?> loginProviders(@Valid @RequestBody NewUser loginUsuario, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity(new Message("Campos mal rellenado binding",HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
 
-        if(loginUsuario == null){
-            return new ResponseEntity(new Message("Campos mal rellenados", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-        }
             if(loginUsuario.getProvider() == "google" || loginUsuario.getProvider() == "facebook"){
                 JwtDto jwt = loginWithThird(loginUsuario);
                 if(jwt.getToken() != ""){
@@ -121,6 +127,6 @@ public class AuthController {
 
         JwtDto jwt = loginWithAPI(loginUsuario);
         return new ResponseEntity(jwt, HttpStatus.OK);
-    }
+    }*/
 
 }
