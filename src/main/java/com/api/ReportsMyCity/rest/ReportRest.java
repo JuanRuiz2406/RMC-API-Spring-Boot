@@ -85,7 +85,7 @@ public class ReportRest {
 
     @CrossOrigin
     @PostMapping(value = "/city/{cityName}")
-    public ResponseEntity create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
+    public ResponseEntity<Report> create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
 
         Coordenates newCoordenates = report.getCoordenates();
         Coordenates savedCoordenates = coordenatesRest.create(newCoordenates).getBody();
@@ -103,7 +103,7 @@ public class ReportRest {
         }
         Report reportSaved = reportRepository.save(report);
         if( reportSaved!= null) {
-            return new ResponseEntity(new Message("Reporte guardado exitosamente con ID:" + reportSaved.getId(),HttpStatus.OK.value()), HttpStatus.OK);
+            return ResponseEntity.ok(reportSaved);
         }else {
             return new ResponseEntity(new Message("Error al crear reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
