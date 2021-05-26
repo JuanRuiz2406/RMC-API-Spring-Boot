@@ -1,9 +1,6 @@
 package com.api.ReportsMyCity.rest;
 
-import com.api.ReportsMyCity.entity.Coordenates;
-import com.api.ReportsMyCity.entity.Municipality;
-import com.api.ReportsMyCity.entity.Report;
-import com.api.ReportsMyCity.entity.User;
+import com.api.ReportsMyCity.entity.*;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
@@ -88,12 +85,12 @@ public class ReportRest {
 
     @CrossOrigin
     @PostMapping(value = "/city/{cityName}")
-    public ResponseEntity create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
+    public ResponseEntity<Report> create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
 
         Coordenates newCoordenates = report.getCoordenates();
         Coordenates savedCoordenates = coordenatesRest.create(newCoordenates).getBody();
         report.setCoordenates(savedCoordenates);
-
+        System.out.println(report.getImgURL());
         Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName).getBody();
         report.setMunicipality(municipalityFound);
 
@@ -104,9 +101,9 @@ public class ReportRest {
         for(ConstraintViolation<Report> violation : violations) {
             return new ResponseEntity(new Message(violation.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY.value()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
-        if(reportRepository.save(report) != null) {
-            return new ResponseEntity(new Message("Reporte guardado exitosamente",HttpStatus.OK.value()), HttpStatus.OK);
+        Report reportSaved = reportRepository.save(report);
+        if( reportSaved!= null) {
+            return ResponseEntity.ok(reportSaved);
         }else {
             return new ResponseEntity(new Message("Error al crear reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
