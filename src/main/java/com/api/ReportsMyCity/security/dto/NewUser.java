@@ -23,6 +23,8 @@ public class NewUser {
     @NotBlank
     private String direction;
 
+    private String provider;
+
     public String getName() {
         return name;
     }
@@ -77,5 +79,13 @@ public class NewUser {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 }

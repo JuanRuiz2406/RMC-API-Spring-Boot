@@ -3,6 +3,8 @@ package com.api.ReportsMyCity.security;
 import com.api.ReportsMyCity.security.jwt.JwtEntryPoint;
 import com.api.ReportsMyCity.security.jwt.JwtTokenFilter;
 import com.api.ReportsMyCity.service.UserDetailsServicesImpl;
+import org.jasypt.util.password.BasicPasswordEncryptor;
+import org.jasypt.util.password.PasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +30,9 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
     JwtEntryPoint jwtEntryPoint;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Bean
     public JwtTokenFilter jwtTokenFilter(){
@@ -69,6 +74,7 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
+                .antMatchers("/user/verificationCode/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)

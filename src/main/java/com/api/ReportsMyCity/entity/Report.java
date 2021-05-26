@@ -40,6 +40,17 @@ public class Report {
     @JoinColumn(nullable = false)
     private Municipality municipality;
 
+    @Column(length = 200)
+    private String imgURL;
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
+    }
+
     public int getId() {
         return id;
     }

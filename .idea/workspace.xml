@@ -4,17 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79cef5a5-580f-4b94-805b-e7623cedf2ef" name="Default Changelist" comment="" />
+    <list default="true" id="bd8f1dd5-b466-4945-a952-aa883a96037c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/ReportRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/ReportRest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1quwNmRpsjXpJi6hHYykb0SVyma" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -29,19 +33,12 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="ReportsMyCityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="ReportsMyCity" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.api.ReportsMyCity.ReportsMyCityApplication" />
@@ -61,10 +58,36 @@
       <workItem from="1617942749949" duration="1342000" />
       <workItem from="1617987848499" duration="1183000" />
       <workItem from="1618022492856" duration="1160000" />
+      <workItem from="1618027589416" duration="1370000" />
+      <workItem from="1618214485593" duration="1000" />
+      <workItem from="1618256836176" duration="1000" />
+      <workItem from="1618274866445" duration="2869000" />
+      <workItem from="1618350087202" duration="2210000" />
+      <workItem from="1618457790603" duration="829000" />
+      <workItem from="1618506780712" duration="3000" />
+      <workItem from="1618598995581" duration="33000" />
+      <workItem from="1618643008140" duration="606000" />
+      <workItem from="1618891268174" duration="28000" />
+      <workItem from="1618947803519" duration="2299000" />
+      <workItem from="1619397688661" duration="5535000" />
+      <workItem from="1619414654971" duration="3000" />
+      <workItem from="1619495296198" duration="605000" />
+      <workItem from="1619738219365" duration="1192000" />
+      <workItem from="1619820213879" duration="46000" />
+      <workItem from="1620179931844" duration="9000" />
+      <workItem from="1620335277397" duration="1825000" />
+      <workItem from="1620602203940" duration="2412000" />
+      <workItem from="1620667921085" duration="3489000" />
+      <workItem from="1620920799932" duration="5023000" />
+      <workItem from="1621383686645" duration="7744000" />
+      <workItem from="1621459289346" duration="1441000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

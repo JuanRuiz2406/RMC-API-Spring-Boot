@@ -1,9 +1,6 @@
 package com.api.ReportsMyCity.rest;
 
-import com.api.ReportsMyCity.entity.Coordenates;
-import com.api.ReportsMyCity.entity.Municipality;
-import com.api.ReportsMyCity.entity.Report;
-import com.api.ReportsMyCity.entity.User;
+import com.api.ReportsMyCity.entity.*;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
@@ -46,17 +43,24 @@ public class ReportRest {
         return ResponseEntity.ok(reports);
     }
 
+    @CrossOrigin
+    @GetMapping(value = "/byPublicPrivacyAndVisibleState")
+    public ResponseEntity<List<Report>> getByPublicPrivacyAndVisibleState() {
+        List<Report> reportsToShow = reportRepository.findByStateAndPrivacy("Aceptado", "Público");
+        return ResponseEntity.ok(reportsToShow);
+    }
+
     @GetMapping(value = "{reportId}")
     public Report getById(@PathVariable("reportId") int reportId){
         return this.reportRepository.findById(reportId).orElseThrow(()->new ResourceNotFoundException("Error, el reporte no existe."));
     }
 
-    @GetMapping(value = "/byUserIdCard/{userIdCard}")
-    public ResponseEntity<List<Report>> getByUserIdCard(@PathVariable("userIdCard") String userIdCard) throws Exception {
-        User userFound = userRest.getByIdCard(userIdCard).getBody();
+    @GetMapping(value = "/byUserEmail/{email}")
+    public ResponseEntity<List<Report>> getByUserEmail(@PathVariable("email") String email) throws Exception {
+        User userFound = userRest.getByEmail(email).getBody();
         List<Report> userReports = reportRepository.findByUser(userFound);
         if(userReports.isEmpty()){
-            return new ResponseEntity(new Message("Usuario no cuenta con reportes", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("Este Usuario no ha Realizado Reportes", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(userReports);
     }
@@ -81,12 +85,12 @@ public class ReportRest {
 
     @CrossOrigin
     @PostMapping(value = "/city/{cityName}")
-    public ResponseEntity create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
+    public ResponseEntity<Report> create(@RequestBody Report report, @PathVariable("cityName") String cityName) throws  Exception{
 
         Coordenates newCoordenates = report.getCoordenates();
         Coordenates savedCoordenates = coordenatesRest.create(newCoordenates).getBody();
         report.setCoordenates(savedCoordenates);
-
+        System.out.println(report.getImgURL());
         Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName).getBody();
         report.setMunicipality(municipalityFound);
 
@@ -97,15 +101,16 @@ public class ReportRest {
         for(ConstraintViolation<Report> violation : violations) {
             return new ResponseEntity(new Message(violation.getMessage(),HttpStatus.UNPROCESSABLE_ENTITY.value()), HttpStatus.UNPROCESSABLE_ENTITY);
         }
-
-        if(reportRepository.save(report) != null) {
-            return new ResponseEntity(new Message("Reporte guardado exitosamente",HttpStatus.OK.value()), HttpStatus.OK);
+        Report reportSaved = reportRepository.save(report);
+        if( reportSaved!= null) {
+            return ResponseEntity.ok(reportSaved);
         }else {
             return new ResponseEntity(new Message("Error al crear reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
 
     }
 
+    @CrossOrigin
     @PutMapping
     public ResponseEntity update(@RequestBody Report reportChanges){
 
@@ -123,43 +128,28 @@ public class ReportRest {
                 return new ResponseEntity(new Message("Error al actualizar reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
         }else {
-            return new ResponseEntity(new Message("Error al actualizar reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("El reporte no existe",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping(value = "{reportId}")
     public ResponseEntity<Report> delete(@PathVariable("reportId") int reportId) {
 
-        Optional<Report> deleteReport = reportRepository.findById(reportId);
+        Optional<Report> existingReport = reportRepository.findById(reportId);
 
-        if(!deleteReport.isPresent()) {
-            return new ResponseEntity(new Message("Seleccione una reporte correcto",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-        }else {
-            reportRepository.deleteById(reportId);
-            return new ResponseEntity(new Message("Reporte eliminado correctamente",HttpStatus.OK.value()), HttpStatus.OK);
-        }
+        if (existingReport.isPresent()) {
+            Report deleteReport = existingReport.get();
+            deleteReport.setState("Eliminado");
 
-    }
-
-    @PutMapping(value = "state/{report}") //???
-    public ResponseEntity deleteReportUpdate(@PathVariable("report") Report report) throws ResourceNotFoundException, ApiOkException, Exception{
-
-        Optional<Report> optionalReport = reportRepository.findById(report.getId());
-
-        if(optionalReport.isPresent()) {
-            Report updateReport = optionalReport.get();
-            updateReport.setDescription(report.getDescription());
-            updateReport.setPrivacy(report.getPrivacy());
-            updateReport.setState("Eliminado");
-
-            if(reportRepository.save(updateReport) != null) {
-                return new ResponseEntity(new Message("Reporte eliminado correctamente",HttpStatus.OK.value()), HttpStatus.OK);
-            }else {
-                return new ResponseEntity(new Message("Error al eliminar el reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            if (reportRepository.save(deleteReport) != null) {
+                return new ResponseEntity(new Message("Reporte eliminado exitosamente", HttpStatus.OK.value()), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(new Message("Error al eliminar el reporte", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
-        }else {
-            return new ResponseEntity(new Message("Error al eliminar el reporte",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity(new Message("El reporte no existe", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
+
     }
 
 }

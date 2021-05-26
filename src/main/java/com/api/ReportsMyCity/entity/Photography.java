@@ -16,10 +16,10 @@ public class Photography {
 
     @Column(length = 50)
     private String category;
-/*
+
     @ManyToOne
     private Report reports;
-*/
+
 
     public int getId() {
         return id;
@@ -43,7 +43,6 @@ public class Photography {
     public void setCategory(String category) {
         this.category = category;
     }
-/*
 
     public Report getReports() {
         return reports;
@@ -52,6 +51,6 @@ public class Photography {
     public void setReports(Report reports) {
         this.reports = reports;
     }
-*/
+
 
 }

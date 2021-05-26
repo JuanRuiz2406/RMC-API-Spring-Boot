@@ -29,11 +29,15 @@ public class Municipality {
     @Column(length = 10, nullable = false)
     private String telephone;
 
-    @Column(length = 45)
-    private String schedule;
+    @Column(length = 45, nullable = false)
+    private String state;
 
     @Column(length = 100)
     private String webSite;
+
+    @OneToOne
+    @JoinColumn(nullable = false)
+    private User manager;
 
     public int getId() {
         return id;
@@ -75,12 +79,12 @@ public class Municipality {
         this.telephone = telephone;
     }
 
-    public String getSchedule() {
-        return schedule;
+    public String getState() {
+        return state;
     }
 
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getWebSite() {
@@ -90,4 +94,13 @@ public class Municipality {
     public void setWebSite(String webSite) {
         this.webSite = webSite;
     }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
+    }
+
 }

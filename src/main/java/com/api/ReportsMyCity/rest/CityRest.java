@@ -23,9 +23,11 @@ import java.util.Set;
 public class CityRest {
 
     private final CityRepository cityRepository;
+    private MunicipalityRest municipalityRest;
 
-    public CityRest(CityRepository cityRepository) {
+    public CityRest(CityRepository cityRepository, MunicipalityRest municipalityRest) {
         this.cityRepository = cityRepository;
+        this.municipalityRest = municipalityRest;
     }
 
     @GetMapping
@@ -46,8 +48,22 @@ public class CityRest {
 
     }
 
+    @CrossOrigin
+    @GetMapping(value = "/byMunicipality/{muniId}")
+    public ResponseEntity<List<City>> getByMunicipalityId(@PathVariable("muniId")int municipalityId){
+        Municipality municipalityFound = municipalityRest.getById(municipalityId);
+
+        List<City> citiesMunicipality = cityRepository.findByMunicipality(municipalityFound);
+
+        return ResponseEntity.ok(citiesMunicipality);
+    }
+
+    @CrossOrigin
     @PostMapping
     public ResponseEntity create(@RequestBody City city) throws ResourceNotFoundException, ApiOkException, Exception{
+
+        Municipality municipalityFound = municipalityRest.getById(city.getMunicipality().getId());
+        city.setMunicipality(municipalityFound);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();

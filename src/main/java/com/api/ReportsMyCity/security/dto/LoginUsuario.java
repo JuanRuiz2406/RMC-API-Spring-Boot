@@ -8,8 +8,14 @@ public class LoginUsuario {
     @NotBlank
     @Email
     private String email;
-    @NotBlank
+
     private String password;
+
+    private String provider;
+
+    private String name;
+
+    private String lastname;
 
     public String getEmail() {
         return email;
@@ -25,5 +31,29 @@ public class LoginUsuario {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 }

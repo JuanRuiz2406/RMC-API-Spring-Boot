@@ -28,8 +28,8 @@ public class DepartamentMunicipality {
     @Column(length = 100, nullable = false)
     private String email;
 
-    @Column(length = 100)
-    private String schedule;
+    @Column(length = 100, nullable = false)
+    private String state;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -79,12 +79,12 @@ public class DepartamentMunicipality {
         this.email = email;
     }
 
-    public String getSchedule() {
-        return schedule;
+    public String getState() {
+        return state;
     }
 
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public Municipality getMunicipality() {

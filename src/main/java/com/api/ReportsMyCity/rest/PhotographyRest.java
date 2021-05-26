@@ -1,6 +1,8 @@
 package com.api.ReportsMyCity.rest;
 
+import com.api.ReportsMyCity.entity.Coordenates;
 import com.api.ReportsMyCity.entity.Photography;
+import com.api.ReportsMyCity.entity.Report;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
 import com.api.ReportsMyCity.exceptions.ApiUnproccessableEntityException;
 import com.api.ReportsMyCity.exceptions.ResourceNotFoundException;
@@ -41,39 +43,16 @@ public class PhotographyRest {
     }
 
     @PostMapping
-    public ResponseEntity create(Photography photo, @RequestParam("Files") List<MultipartFile> files) throws ResourceNotFoundException, ApiOkException, Exception {
-        boolean flag = true;
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-        for ( MultipartFile file : files){
-            System.out.println(rootFolder);
-            File myFile = new File(rootFolder+file.getOriginalFilename());
-            myFile.createNewFile();
-            FileOutputStream fos =new FileOutputStream(myFile);
-            fos.write(file.getBytes());
-            fos.close();
-            photo.setImagePath(rootFolder+file.getOriginalFilename());
-            photo.setId(photo.getId()+1);
-            Set<ConstraintViolation<Photography>> violation = validator.validate(photo);
-            for(ConstraintViolation<Photography> violation2 : violation) {
-                throw new ApiUnproccessableEntityException(violation2.getMessage());
-            }
-            if(photographyRepository.save(photo) != null) {
-                System.out.println("saved: " + photo.getImagePath());
-                flag = true;
-            }else {
-                flag = false;
-            }
-        }
-
-        if(flag) {
-            throw new ApiOkException("Imagen guardada exitosamente.");
+    public ResponseEntity create(@RequestBody Photography photography) throws Exception {
+        System.out.println("entró");
+        System.out.println("--------------------------");
+        Photography savedPhotography =  photographyRepository.save(photography);
+        System.out.println("save: " + savedPhotography.getId());
+        if(savedPhotography != null) {
+            throw new ApiOkException("Imagen guardada exitosamente con ID:" + savedPhotography.getId());
         }else {
             return new ResponseEntity(new Message("Error al guardar la imagen.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
-
-
     }
-
 
 }
