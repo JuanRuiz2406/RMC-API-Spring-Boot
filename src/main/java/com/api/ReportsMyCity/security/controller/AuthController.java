@@ -93,8 +93,6 @@ public class AuthController {
             return new ResponseEntity(new Message("Campos mal rellenado binding",HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
 
         if (!userRest.getExistsByEmail(newUser.getEmail())){
-            //User userTemp = new User(0,"123456789",newUser.getName(),newUser.getLastName(), newUser.getEmail(), passwordEncoder.encode("12345678"),"123456789", "user", "direccion", "activo");
-            //userRepository.save(userTemp);
             ResponseEntity res = nuevo(newUser, bindingResult);
             if(res.getStatusCode().value() != 201){
                 return new ResponseEntity(new Message("Error al crear usuario", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
@@ -112,22 +110,5 @@ public class AuthController {
         }
         return new ResponseEntity(new Message("Error en el servidor", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
     }
-
-    /*@PostMapping("/loginproviders")
-    public ResponseEntity<?> loginProviders(@Valid @RequestBody NewUser loginUsuario, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity(new Message("Campos mal rellenado binding",HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
-
-            if(loginUsuario.getProvider() == "google" || loginUsuario.getProvider() == "facebook"){
-                JwtDto jwt = loginWithThird(loginUsuario);
-                if(jwt.getToken() != ""){
-                    return new ResponseEntity(jwt, HttpStatus.OK);
-                }
-                return new ResponseEntity(new Message("Usuario no registrado, completo los siguiente campos", HttpStatus.CONTINUE.value()),HttpStatus.CONTINUE);
-            }
-
-        JwtDto jwt = loginWithAPI(loginUsuario);
-        return new ResponseEntity(jwt, HttpStatus.OK);
-    }*/
 
 }
