@@ -12,15 +12,17 @@ import java.util.Optional;
 public interface ReportRepository extends JpaRepository<Report, Integer> {
 
     @Transactional (readOnly = true)
-    List<Report> findByUser(User user);
+    List<Report> findByUserOrderByIdDesc(User user);
 
     @Transactional (readOnly = true)
-    List<Report> findByMunicipality(Municipality municipality);
+    List<Report> findByMunicipalityOrderByIdDesc(Municipality municipality);
 
     @Transactional (readOnly = true)
-    List<Report> findByState(String state);
+    List<Report> findByStateOrderByIdDesc(String state);
 
     @Transactional (readOnly = true)
-    List<Report> findByStateAndPrivacy(String state, String privacy);
+    List<Report> findByStateAndPrivacyOrderByIdDesc(String state, String privacy);
 
+    @Transactional (readOnly = true)
+    List<Report> findAllByOrderByIdDesc();
 }
