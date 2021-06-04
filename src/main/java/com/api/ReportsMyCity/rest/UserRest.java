@@ -125,7 +125,7 @@ public class UserRest {
         User UserWhitExistingEmail = userRepository.findByEmail(user.getEmail());
 
         if (UserWhitExistingEmail != null) {
-            return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al guardar, ya está en uso el correo ",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }else {
             userRepository.save(user);
             return new ResponseEntity(new Message("Usuario guardado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
@@ -151,26 +151,35 @@ public class UserRest {
         User UserWhitExistingEmail = userRepository.findByEmail(user.getEmail());
 
         if (UserWhitExistingEmail != null) {
-            return new ResponseEntity(new Message("Error al guardar, ya existe el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Message("Error al guardar, ya está en uso el correo ",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }else {
             User savedManager = userRepository.save(user);
             return ResponseEntity.ok(savedManager);
         }
     }
 
+    @CrossOrigin
     @PutMapping
     public ResponseEntity update(@RequestBody User user){
 
         Optional<User> optionalUser = userRepository.findById(user.getId());
         if (optionalUser.isPresent()) {
             User updateUser = optionalUser.get();
+            updateUser.setIdCard(user.getIdCard());
             updateUser.setName(user.getName());
             updateUser.setLastname(user.getLastname());
             updateUser.setEmail(user.getEmail());
             updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            updateUser.setPassdecode(user.getPassword());
             updateUser.setRole("user");
             updateUser.setDirection(user.getDirection());
+            updateUser.setState(user.getState());
 
+            User UserWhitExistingEmail = userRepository.findByEmail(user.getEmail());
+
+            if (UserWhitExistingEmail != null) {
+                return new ResponseEntity(new Message("Error al guardar, ya está en uso el correo ",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
             if(userRepository.save(updateUser)!= null){
                 return new ResponseEntity(new Message("Usuario actualizado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
             }else {
