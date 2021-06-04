@@ -15,6 +15,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -93,6 +94,8 @@ public class ReportRest {
         System.out.println(report.getImgURL());
         Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName).getBody();
         report.setMunicipality(municipalityFound);
+
+        report.setCreatedAt(new Date(System.currentTimeMillis()));
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();

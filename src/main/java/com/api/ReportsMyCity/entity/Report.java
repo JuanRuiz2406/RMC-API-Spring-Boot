@@ -1,7 +1,12 @@
 package com.api.ReportsMyCity.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Entity
@@ -27,6 +32,10 @@ public class Report {
     @NotBlank(message = "La privacidad es obligatoria")
     @Column(length = 45, nullable = false)
     private String privacy;
+
+    @JsonFormat(pattern="dd/MM/yyyy")
+    @Column(nullable = false, updatable = false)
+    private Date createdAt;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -113,5 +122,13 @@ public class Report {
 
     public void setMunicipality(Municipality municipality) {
         this.municipality = municipality;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
