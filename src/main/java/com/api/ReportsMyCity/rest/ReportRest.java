@@ -15,6 +15,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -39,14 +40,14 @@ public class ReportRest {
     @CrossOrigin
     @GetMapping
     public ResponseEntity<List<Report>> getAll() {
-        List<Report> reports = reportRepository.findAll();
+        List<Report> reports = reportRepository.findAllByOrderByIdDesc();
         return ResponseEntity.ok(reports);
     }
 
     @CrossOrigin
     @GetMapping(value = "/byPublicPrivacyAndVisibleState")
     public ResponseEntity<List<Report>> getByPublicPrivacyAndVisibleState() {
-        List<Report> reportsToShow = reportRepository.findByStateAndPrivacy("Aceptado", "Público");
+        List<Report> reportsToShow = reportRepository.findByStateAndPrivacyOrderByIdDesc("Aceptado", "Público");
         return ResponseEntity.ok(reportsToShow);
     }
 
@@ -58,7 +59,7 @@ public class ReportRest {
     @GetMapping(value = "/byUserEmail/{email}")
     public ResponseEntity<List<Report>> getByUserEmail(@PathVariable("email") String email) throws Exception {
         User userFound = userRest.getByEmail(email).getBody();
-        List<Report> userReports = reportRepository.findByUser(userFound);
+        List<Report> userReports = reportRepository.findByUserOrderByIdDesc(userFound);
         if(userReports.isEmpty()){
             return new ResponseEntity(new Message("Este Usuario no ha Realizado Reportes", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
@@ -67,7 +68,7 @@ public class ReportRest {
 
     @GetMapping(value = "/byMunicipality/{muni}")
     public ResponseEntity<List<Report>> getByMunicipality(@PathVariable("muni")Municipality municipality){
-        List<Report> reportsMunicipality = reportRepository.findByMunicipality(municipality);
+        List<Report> reportsMunicipality = reportRepository.findByMunicipalityOrderByIdDesc(municipality);
         if(reportsMunicipality.isEmpty()){
             return new ResponseEntity(new Message("Municipalidad no tiene reportes",HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
@@ -76,7 +77,7 @@ public class ReportRest {
 
     @GetMapping(value = "/byState/{state}")
     public ResponseEntity<List<Report>> getByState(@PathVariable("state") String state){
-        List<Report> reportsByState = reportRepository.findByState(state);
+        List<Report> reportsByState = reportRepository.findByStateOrderByIdDesc(state);
         if(reportsByState.isEmpty()){
             return new ResponseEntity(new Message("No Existen reportes con el estado: " + state, HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
@@ -93,6 +94,8 @@ public class ReportRest {
         System.out.println(report.getImgURL());
         Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName).getBody();
         report.setMunicipality(municipalityFound);
+
+        report.setCreatedAt(new Date(System.currentTimeMillis()));
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
