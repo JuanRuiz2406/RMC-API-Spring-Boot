@@ -182,8 +182,8 @@ public class UserRest {
 
     }
     @CrossOrigin
-    @GetMapping(value = "/verificationCode/{email}/{code}")
-    public ResponseEntity checkVerificationCode(@PathVariable String email, @PathVariable String code) throws ApiOkException, ResourceNotFoundException, Exception{
+    @GetMapping(value = "/verificationCode/{email}/{code}/{password}")
+    public ResponseEntity checkVerificationCode(@PathVariable String email, @PathVariable String code, @PathVariable String password) throws ApiOkException, ResourceNotFoundException, Exception{
         User user = userRepository.findByEmail(email);
         if (user != null) {
             if (user.getCode().equals(code)){
@@ -194,7 +194,10 @@ public class UserRest {
                 int milisecondsByDay = 86400000;
                 int dias = (int) ((localCurrentDate.getTime()-codeDate.getTime()) / milisecondsByDay);
                 if(dias == 0){
-                    return new ResponseEntity(new Message("Código Válido",HttpStatus.CREATED.value()), HttpStatus.CREATED);
+                    System.out.println(password);
+                    user.setPassword(password);
+                    update(user);
+                    return new ResponseEntity(new Message("Contraseña actualizada correctamente",HttpStatus.CREATED.value()), HttpStatus.CREATED);
                 }else {
                     return new ResponseEntity(new Message("El código ha expirado",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
                 }
