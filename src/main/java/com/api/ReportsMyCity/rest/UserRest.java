@@ -160,28 +160,28 @@ public class UserRest {
 
     @CrossOrigin
     @PutMapping
-    public ResponseEntity update(@RequestBody User user){
+    public ResponseEntity update(@RequestBody User userChanges){
 
-        Optional<User> optionalUser = userRepository.findById(user.getId());
+        Optional<User> optionalUser = userRepository.findById(userChanges.getId());
         if (optionalUser.isPresent()) {
             User updateUser = optionalUser.get();
-            updateUser.setIdCard(user.getIdCard());
-            updateUser.setName(user.getName());
-            updateUser.setLastname(user.getLastname());
-            updateUser.setEmail(user.getEmail());
-            updateUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            updateUser.setPassdecode(user.getPassword());
+            updateUser.setIdCard(userChanges.getIdCard());
+            updateUser.setName(userChanges.getName());
+            updateUser.setLastname(userChanges.getLastname());
+            updateUser.setEmail(userChanges.getEmail());
+            updateUser.setPassword(passwordEncoder.encode(userChanges.getPassword()));
+            updateUser.setPassdecode(userChanges.getPassword());
             updateUser.setRole("user");
-            updateUser.setDirection(user.getDirection());
-            updateUser.setState(user.getState());
+            updateUser.setDirection(userChanges.getDirection());
+            updateUser.setState(userChanges.getState());
 
-            User UserWhitExistingEmail = userRepository.findByEmail(user.getEmail());
+            User UserWhitExistingEmail = userRepository.findByEmail(userChanges.getEmail());
 
-            if (UserWhitExistingEmail != null) {
+            if (UserWhitExistingEmail.getId() != userChanges.getId()) {
                 return new ResponseEntity(new Message("Error al guardar, ya está en uso el correo ",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
             if(userRepository.save(updateUser)!= null){
-                return new ResponseEntity(new Message("Usuario actualizado",HttpStatus.CREATED.value()), HttpStatus.CREATED);
+                return new ResponseEntity(new Message("Usuario actualizado correctamente",HttpStatus.CREATED.value()), HttpStatus.CREATED);
             }else {
                 return new ResponseEntity(new Message("Error aL actualizar el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }

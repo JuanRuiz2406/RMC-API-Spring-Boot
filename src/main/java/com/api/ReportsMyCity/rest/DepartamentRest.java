@@ -1,6 +1,5 @@
 package com.api.ReportsMyCity.rest;
 
-import com.api.ReportsMyCity.entity.City;
 import com.api.ReportsMyCity.entity.DepartamentMunicipality;
 import com.api.ReportsMyCity.entity.Municipality;
 import com.api.ReportsMyCity.entity.User;
@@ -35,27 +34,27 @@ public class DepartamentRest {
     // Faltan Msjs
 
     @GetMapping
-    public ResponseEntity<List<DepartamentMunicipality>> getAll(){
+    public ResponseEntity<List<DepartamentMunicipality>> getAll() {
 
         List<DepartamentMunicipality> departaments = departamentRepository.findAll();
         return ResponseEntity.ok(departaments);
     }
 
     @GetMapping(value = "/byId/{departamentId}")
-    public ResponseEntity<DepartamentMunicipality> getById(@PathVariable("departamentId") int departamentId){
+    public ResponseEntity<DepartamentMunicipality> getById(@PathVariable("departamentId") int departamentId) {
 
         Optional<DepartamentMunicipality> departamentById = departamentRepository.findById(departamentId);
 
-        if(departamentById.isPresent()) {
+        if (departamentById.isPresent()) {
             return ResponseEntity.ok(departamentById.get());
-        }else {
+        } else {
             return new ResponseEntity(new Message("No existe departamento con ese id", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
     }
 
     @CrossOrigin
     @GetMapping(value = "/byMunicipality/{muniId}")
-    public ResponseEntity<List<DepartamentMunicipality>> getByMunicipalityId(@PathVariable("muniId")int municipalityId){
+    public ResponseEntity<List<DepartamentMunicipality>> getByMunicipalityId(@PathVariable("muniId") int municipalityId) {
         Municipality municipalityFound = municipalityRest.getById(municipalityId);
 
         List<DepartamentMunicipality> departaments = departamentRepository.findByMunicipality(municipalityFound);
@@ -65,7 +64,7 @@ public class DepartamentRest {
 
     @CrossOrigin
     @GetMapping(value = "/byUser/{userId}")
-    public ResponseEntity<List<DepartamentMunicipality>> getByUserId(@PathVariable("userId")int userId){
+    public ResponseEntity<List<DepartamentMunicipality>> getByUserId(@PathVariable("userId") int userId) {
         User userFound = userRest.getById(userId);
 
         List<DepartamentMunicipality> departament = departamentRepository.findByManager(userFound);
@@ -85,50 +84,80 @@ public class DepartamentRest {
         Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<DepartamentMunicipality>> violations = validator.validate(departament);
-        for(ConstraintViolation<DepartamentMunicipality> violation : violations) {
-            return new ResponseEntity(new Message(violation.getMessage(),HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        for (ConstraintViolation<DepartamentMunicipality> violation : violations) {
+            return new ResponseEntity(new Message(violation.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
 
         DepartamentMunicipality existingEmail = departamentRepository.findByEmail(departament.getEmail());
         DepartamentMunicipality existingName = departamentRepository.findByName(departament.getName());
 
-        if(existingEmail !=  null) {
-            return new ResponseEntity(new Message("Error, ya existe un departamento con este correo",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-        }else if(existingName != null){
-            return new ResponseEntity(new Message("Error, otro departamento posee este nombre.",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-        }else {
+        if (existingEmail != null) {
+            return new ResponseEntity(new Message("Error, ya existe un departamento con este correo", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        } else if (existingName != null) {
+            return new ResponseEntity(new Message("Error, otro departamento posee este nombre.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        } else {
             departamentRepository.save(departament);
-            return new ResponseEntity(new Message("Departamento guardado exitosamente",HttpStatus.OK.value()), HttpStatus.OK);
+            return new ResponseEntity(new Message("Departamento guardado exitosamente", HttpStatus.OK.value()), HttpStatus.OK);
         }
 
     }
 
+    @CrossOrigin
     @PutMapping
-    public ResponseEntity<DepartamentMunicipality> update(@RequestBody DepartamentMunicipality departamentChanges){
+    public ResponseEntity update(@RequestBody DepartamentMunicipality departamentChanges) {
 
         Optional<DepartamentMunicipality> existingDepartament = departamentRepository.findById(departamentChanges.getId());
 
-        if(existingDepartament.isPresent()) {
-            DepartamentMunicipality updateDepartament = existingDepartament.get();
-            updateDepartament.setDescription(departamentChanges.getDescription());
-            updateDepartament.setEmail(departamentChanges.getEmail());
-            updateDepartament.setName(departamentChanges.getName());
-            updateDepartament.setState(departamentChanges.getState());
-            updateDepartament.setTelephone(departamentChanges.getTelephone());
+        if (existingDepartament.isPresent()) {
+            if (!departamentChanges.getName().isEmpty()) {
+                if (!departamentChanges.getEmail().isEmpty()) {
 
-            departamentRepository.save(updateDepartament);
-            return ResponseEntity.ok(updateDepartament);
-        }else {
-            return ResponseEntity.notFound().build();
+                    DepartamentMunicipality updateDepartament = existingDepartament.get();
+                    updateDepartament.setDescription(departamentChanges.getDescription());
+                    updateDepartament.setEmail(departamentChanges.getEmail());
+                    updateDepartament.setName(departamentChanges.getName());
+                    updateDepartament.setState(departamentChanges.getState());
+                    updateDepartament.setTelephone(departamentChanges.getTelephone());
+                    updateDepartament.setManager(departamentChanges.getManager());
 
+                    if (departamentRepository.save(updateDepartament) != null) {
+                        return new ResponseEntity(new Message("Departamento actualizado correctamente", HttpStatus.OK.value()), HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity(new Message("Error al actualizar el departamento.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+                    }
+                } else {
+                    return new ResponseEntity(new Message("Introduzca un correo electronico correcto.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity(new Message("Introduzca un nombre de departamento correcto.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+
+        } else {
+            return new ResponseEntity(new Message("Error, el departamento no existe.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
         }
+
     }
 
+    @CrossOrigin
     @DeleteMapping(value = "{departamentId}")
-    public ResponseEntity<DepartamentMunicipality> delete(@PathVariable("departamentId") int departamentId){
+    public ResponseEntity delete(@PathVariable("departamentId") int departamentId) {
 
-        departamentRepository.deleteById(departamentId);
-        return ResponseEntity.ok(null);
+        Optional<DepartamentMunicipality> existingDepartament = departamentRepository.findById(departamentId);
+
+        if (existingDepartament.isPresent()) {
+
+            DepartamentMunicipality deleteMunicipality = existingDepartament.get();
+            deleteMunicipality.setState("Inactivo");
+
+            if (departamentRepository.save(deleteMunicipality) != null) {
+                return new ResponseEntity(new Message("El departamento se eliminó exitosamente", HttpStatus.OK.value()), HttpStatus.OK);
+            } else {
+                return new ResponseEntity(new Message("Error al eliminar el departamento.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+
+        } else {
+            return new ResponseEntity(new Message("Error, el departamento no existe.", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
