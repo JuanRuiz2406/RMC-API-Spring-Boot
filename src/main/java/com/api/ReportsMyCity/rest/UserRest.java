@@ -161,22 +161,19 @@ public class UserRest {
     @CrossOrigin
     @PutMapping
     public ResponseEntity update(@RequestBody User userChanges){
-
         Optional<User> optionalUser = userRepository.findById(userChanges.getId());
         if (optionalUser.isPresent()) {
             User updateUser = optionalUser.get();
             updateUser.setIdCard(userChanges.getIdCard());
             updateUser.setName(userChanges.getName());
-            updateUser.setLastname(userChanges.getLastname());
             updateUser.setEmail(userChanges.getEmail());
             updateUser.setPassword(passwordEncoder.encode(userChanges.getPassword()));
             updateUser.setPassdecode(userChanges.getPassword());
-            updateUser.setRole("user");
+            updateUser.setRole(userChanges.getRole());
             updateUser.setDirection(userChanges.getDirection());
             updateUser.setState(userChanges.getState());
 
             User UserWhitExistingEmail = userRepository.findByEmail(userChanges.getEmail());
-
             if (UserWhitExistingEmail.getId() != userChanges.getId()) {
                 return new ResponseEntity(new Message("Error al guardar, ya está en uso el correo ",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
@@ -190,6 +187,27 @@ public class UserRest {
         }
 
     }
+
+    @CrossOrigin
+    @PutMapping(value = "/image")
+    public ResponseEntity updateImage(@RequestBody User userChanges){
+        System.out.println("ENTRÓ");
+        Optional<User> optionalUser = userRepository.findById(userChanges.getId());
+        if (optionalUser.isPresent()) {
+            User updateUser = optionalUser.get();
+            updateUser.setImgURL(userChanges.getImgURL());
+
+            if(userRepository.save(updateUser)!= null){
+                return new ResponseEntity(new Message("Usuario actualizado correctamente",HttpStatus.CREATED.value()), HttpStatus.CREATED);
+            }else {
+                return new ResponseEntity(new Message("Error aL actualizar el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+        }else {
+            return new ResponseEntity(new Message("Usuario No existe",HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
+        }
+
+    }
+
     @CrossOrigin
     @GetMapping(value = "/verificationCode/{email}/{code}/{password}")
     public ResponseEntity checkVerificationCode(@PathVariable String email, @PathVariable String code, @PathVariable String password) throws ApiOkException, ResourceNotFoundException, Exception{

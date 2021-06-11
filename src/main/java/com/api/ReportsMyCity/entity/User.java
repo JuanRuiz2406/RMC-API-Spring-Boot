@@ -55,6 +55,9 @@ public class User implements Serializable {
     @Column(length = 50)
     private String state;
 
+    @Column(length = 200)
+    private String imgURL;
+
     public User(int id, @NotBlank(message = "La tarjeta de identificacion es obligatoria") String idCard, @NotBlank(message = "El nombre es obligatorio") String name, @NotBlank(message = "El apellido es obligatorio") String lastname, @NotBlank(message = "El correo es obligatorio") @Email(message = "El correo tiene un formato invalido") String email, @NotBlank(message = "La contraseña es obligatoria") String password, @NotBlank(message = "La contraseña es obligatoria") String passdecode, String role, String direction, String state) {
         this.id = id;
         this.idCard = idCard;
@@ -164,5 +167,13 @@ public class User implements Serializable {
 
     public void setPassdecode(String passdecode) {
         this.passdecode = passdecode;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
     }
 }
