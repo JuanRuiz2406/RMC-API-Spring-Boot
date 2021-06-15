@@ -84,6 +84,7 @@ public class CityRest {
 
     }
 
+    @CrossOrigin
     @PutMapping
     public ResponseEntity update(@RequestBody City cityChanges){
 
@@ -107,6 +108,7 @@ public class CityRest {
 
     }
 
+    @CrossOrigin
     @DeleteMapping(value = "{cityId}")
     public ResponseEntity<City> delete(@PathVariable("cityId") int cityId) {
 
