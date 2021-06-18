@@ -19,6 +19,10 @@ public class JwtDto {
         this.user = user;
     }
 
+    public JwtDto(){
+
+    }
+
     public String getToken() {
         return token;
     }

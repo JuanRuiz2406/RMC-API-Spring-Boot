@@ -63,6 +63,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginUsuario loginUsuario){
+        Boolean exists = userRepository.existsByEmail(loginUsuario.getEmail());
+        if(exists == false){
+            return new ResponseEntity(new Message("Credenciales incorrectas", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+        }
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUsuario.getEmail(), loginUsuario.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
