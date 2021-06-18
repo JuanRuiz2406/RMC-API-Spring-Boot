@@ -10,7 +10,7 @@ public class Photography {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(length = 200, unique = true)
+    @Column(length = 999, unique = true)
     private String imagePath;
 
 

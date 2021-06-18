@@ -1,6 +1,7 @@
 package com.api.ReportsMyCity.rest;
 
 import com.api.ReportsMyCity.entity.Coordenates;
+import com.api.ReportsMyCity.entity.DetailReport;
 import com.api.ReportsMyCity.entity.Photography;
 import com.api.ReportsMyCity.entity.Report;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
@@ -23,6 +24,7 @@ import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -31,15 +33,29 @@ public class PhotographyRest {
 
     private final String rootFolder = System.getProperty("user.dir") + "\\uploads\\";
     private final PhotographyRepository photographyRepository;
+    private ReportRest reportRest;
 
     public PhotographyRest(PhotographyRepository photographyRepository) {
         this.photographyRepository = photographyRepository;
+        this.reportRest = reportRest;
     }
 
     @GetMapping
     public ResponseEntity<List<Photography>> getAll() {
         List<Photography> photographs = photographyRepository.findAll();
         return ResponseEntity.ok(photographs);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/byReport/{reportId}")
+    public ResponseEntity<List<Photography>> getByReportId(@PathVariable("reportId") int reportId){
+
+        Report report = reportRest.getById(reportId);
+        List<Photography> photoByReport = photographyRepository.findByReports(report);
+        if(photoByReport.isEmpty()){
+            return ResponseEntity.ok(photoByReport);
+        }
+        return ResponseEntity.ok(photoByReport);
     }
 
     @PostMapping

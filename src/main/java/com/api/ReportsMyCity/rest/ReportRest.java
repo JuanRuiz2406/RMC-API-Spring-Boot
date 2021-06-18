@@ -91,7 +91,6 @@ public class ReportRest {
         Coordenates newCoordenates = report.getCoordenates();
         Coordenates savedCoordenates = coordenatesRest.create(newCoordenates).getBody();
         report.setCoordenates(savedCoordenates);
-        System.out.println(report.getImgURL());
         Municipality municipalityFound = cityRest.getMunicipalityByCityName(cityName).getBody();
         report.setMunicipality(municipalityFound);
 
