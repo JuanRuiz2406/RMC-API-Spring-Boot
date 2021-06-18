@@ -25,6 +25,8 @@ public class UsuarioPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
+    public UsuarioPrincipal(){}
+
     public static UsuarioPrincipal build(User user){
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getRole()));
