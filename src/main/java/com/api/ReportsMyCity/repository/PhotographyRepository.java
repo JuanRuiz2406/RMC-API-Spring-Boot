@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface PhotographyRepository extends JpaRepository<Photography, Integer> {
     @Transactional(readOnly = true)
-    List<Photography> findByReports(Report report);
+    List<Photography> findByReport(Report report);
 }

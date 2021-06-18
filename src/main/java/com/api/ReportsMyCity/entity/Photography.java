@@ -18,7 +18,7 @@ public class Photography {
     private String category;
 
     @ManyToOne
-    private Report reports;
+    private Report report;
 
 
     public int getId() {
@@ -45,11 +45,11 @@ public class Photography {
     }
 
     public Report getReports() {
-        return reports;
+        return report;
     }
 
     public void setReports(Report reports) {
-        this.reports = reports;
+        this.report = reports;
     }
 
 
