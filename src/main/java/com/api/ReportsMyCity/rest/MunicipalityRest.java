@@ -1,5 +1,6 @@
 package com.api.ReportsMyCity.rest;
 
+import com.api.ReportsMyCity.entity.DepartamentMunicipality;
 import com.api.ReportsMyCity.entity.Municipality;
 import com.api.ReportsMyCity.entity.User;
 import com.api.ReportsMyCity.exceptions.ApiOkException;
@@ -40,6 +41,16 @@ public class MunicipalityRest {
     @GetMapping(value = "{municipalityId}")
     public Municipality getById(@PathVariable("municipalityId") int municipalityId) {
         return this.municipalityRepository.findById(municipalityId).orElseThrow(() -> new ResourceNotFoundException("Error, la municipalidad no existe."));
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/byUser/{userId}")
+    public ResponseEntity<List<Municipality>> getByUserId(@PathVariable("userId") int userId) {
+        User userFound = userRest.getById(userId);
+
+        List<Municipality> municipality = municipalityRepository.findByManager(userFound);
+
+        return ResponseEntity.ok(municipality);
     }
 
     @CrossOrigin
