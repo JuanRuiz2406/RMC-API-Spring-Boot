@@ -47,7 +47,7 @@ public class ReportRest {
     @CrossOrigin
     @GetMapping(value = "/byPublicPrivacyAndVisibleState")
     public ResponseEntity<List<Report>> getByPublicPrivacyAndVisibleState() {
-        List<Report> reportsToShow = reportRepository.findByStateNotOrStateNotAndPrivacyOrderByIdDesc("Rechazado", "Eliminado", "Público");
+        List<Report> reportsToShow = reportRepository.findByStateNotAndStateNotAndPrivacyOrderByIdDesc("Rechazado", "Eliminado", "Público");
         return ResponseEntity.ok(reportsToShow);
     }
 
