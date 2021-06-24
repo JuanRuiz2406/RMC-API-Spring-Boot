@@ -21,7 +21,7 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     List<Report> findByStateOrderByIdDesc(String state);
 
     @Transactional (readOnly = true)
-    List<Report> findByStateAndPrivacyOrderByIdDesc(String state, String privacy);
+    List<Report> findByStateNotAndPrivacyOrderByIdDesc(String state, String privacy);
 
     @Transactional (readOnly = true)
     List<Report> findAllByOrderByIdDesc();
