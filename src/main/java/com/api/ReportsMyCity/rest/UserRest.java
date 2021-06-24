@@ -189,6 +189,34 @@ public class UserRest {
     }
 
     @CrossOrigin
+    @PutMapping(value = "/updateProfile")
+    public ResponseEntity updateProfile(@RequestBody User userChanges){
+        Optional<User> optionalUser = userRepository.findById(userChanges.getId());
+        if (optionalUser.isPresent()) {
+            User updateUser = optionalUser.get();
+            updateUser.setIdCard(userChanges.getIdCard());
+            updateUser.setName(userChanges.getName());
+            updateUser.setEmail(userChanges.getEmail());
+            updateUser.setRole(userChanges.getRole());
+            updateUser.setDirection(userChanges.getDirection());
+            updateUser.setState(userChanges.getState());
+
+            User UserWhitExistingEmail = userRepository.findByEmail(userChanges.getEmail());
+            if (UserWhitExistingEmail.getId() != userChanges.getId()) {
+                return new ResponseEntity(new Message("Error al guardar, ya está en uso el correo ",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+            if(userRepository.save(updateUser)!= null){
+                return new ResponseEntity(new Message("Usuario actualizado correctamente",HttpStatus.CREATED.value()), HttpStatus.CREATED);
+            }else {
+                return new ResponseEntity(new Message("Error aL actualizar el usuario",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            }
+        }else {
+            return new ResponseEntity(new Message("Usuario No existe",HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
+        }
+
+    }
+
+    @CrossOrigin
     @PutMapping(value = "/image")
     public ResponseEntity updateImage(@RequestBody User userChanges){
         System.out.println("ENTRÓ");
