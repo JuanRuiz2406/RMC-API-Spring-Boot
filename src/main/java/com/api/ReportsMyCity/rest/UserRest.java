@@ -251,13 +251,14 @@ public class UserRest {
                 if(dias == 0){
                     System.out.println(password);
                     user.setPassword(password);
+                    user.setPassdecode(password);
                     update(user);
                     return new ResponseEntity(new Message("Contraseña actualizada correctamente",HttpStatus.CREATED.value()), HttpStatus.CREATED);
                 }else {
                     return new ResponseEntity(new Message("El código ha expirado",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
                 }
             }else{
-                return new ResponseEntity(new Message("El código es incorrecto",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity(new Message("El código es incorrecto, verifica que las mayúsculas y minúsculas coincidan con el código",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
             }
         }else {
             return new ResponseEntity(new Message("No existe un usuario con este correo",HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
