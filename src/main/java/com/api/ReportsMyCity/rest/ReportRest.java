@@ -27,13 +27,14 @@ public class ReportRest {
     private final ReportRepository reportRepository;
     private CoordenatesRest coordenatesRest;
     private CityRest cityRest;
-    private PhotographyRest photographyRest;
+    private MunicipalityRest municipalityRest;
     private UserRest userRest;
 
-    public ReportRest(ReportRepository reportRepository, CoordenatesRest coordenatesRest, CityRest cityRest, UserRest userRest) {
+    public ReportRest(ReportRepository reportRepository, CoordenatesRest coordenatesRest, CityRest cityRest, MunicipalityRest municipalityRest, UserRest userRest) {
         this.reportRepository = reportRepository;
         this.coordenatesRest = coordenatesRest;
         this.cityRest = cityRest;
+        this.municipalityRest = municipalityRest;
         this.userRest = userRest;
     }
 
@@ -67,11 +68,13 @@ public class ReportRest {
         return ResponseEntity.ok(userReports);
     }
 
-    @GetMapping(value = "/byMunicipality/{muni}")
-    public ResponseEntity<List<Report>> getByMunicipality(@PathVariable("muni") Municipality municipality) {
-        List<Report> reportsMunicipality = reportRepository.findByMunicipalityOrderByIdDesc(municipality);
+    @CrossOrigin
+    @GetMapping(value = "/byMunicipality/{municipalityId}")
+    public ResponseEntity<List<Report>> getByMunicipality(@PathVariable("municipalityId") int municipalityId) {
+        Municipality municipalityFound = municipalityRest.getById(municipalityId);
+        List<Report> reportsMunicipality = reportRepository.findByMunicipalityOrderByIdDesc(municipalityFound);
         if (reportsMunicipality.isEmpty()) {
-            return new ResponseEntity(new Message("Municipalidad no tiene reportes", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
+            return new ResponseEntity(new Message("Esta Municipalidad no posee reportes", HttpStatus.NO_CONTENT.value()), HttpStatus.NO_CONTENT);
         }
         return ResponseEntity.ok(reportsMunicipality);
     }
