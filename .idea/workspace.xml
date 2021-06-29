@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="bd8f1dd5-b466-4945-a952-aa883a96037c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/MunicipalityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/repository/MunicipalityRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/MunicipalityRest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/api/ReportsMyCity/rest/MunicipalityRest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,20 +41,7 @@
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
-  <component name="RunManager" selected="Application.ReportsMyCityApplication">
-    <configuration name="ReportsMyCityApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.api.ReportsMyCity.ReportsMyCityApplication" />
-      <module name="ReportsMyCity" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.api.ReportsMyCity.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager">
     <configuration name="ReportsMyCityApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="ReportsMyCity" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.api.ReportsMyCity.ReportsMyCityApplication" />
@@ -61,11 +49,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.ReportsMyCityApplication" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -121,10 +104,5 @@
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/spring_api_rmc$ReportsMyCityApplication.ic" NAME="ReportsMyCityApplication Coverage Results" MODIFIED="1623746464559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>com.api.ReportsMyCity.*</FILTER>
-    </SUITE>
   </component>
 </project>
